@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.close.ai.mapper.ToolMapper">
+
+    <resultMap id="ToolMap" type="com.close.ai.pojo.Tool">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
+        <result column="tags" property="tags" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="LONGVARCHAR"/>
+        <result column="source_code" property="sourceCode" jdbcType="VARCHAR"/>
+        <result column="source_code_language" property="sourceCodeLanguageEnum"/>
+        <result column="is_template" property="isTemplate" jdbcType="BOOLEAN"/>
+        <result column="version" property="version" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="TINYINT"/>
+        <result column="created_by" property="createdBy" jdbcType="BIGINT"/>
+        <result column="created_by_type" property="createdByType" jdbcType="VARCHAR"/>
+        <result column="last_updated_by" property="lastUpdatedBy" jdbcType="BIGINT"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectToolById" parameterType="Long" resultMap="ToolMap">
+        SELECT id, name, avatar, tags, description, source_code, source_code_language, is_template,
+               version, state, created_by, created_by_type, last_updated_by, created_time, updated_time
+        FROM tool
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertTool" parameterType="com.close.ai.pojo.Tool">
+        INSERT INTO tool (id,name, avatar, tags, description, source_code, source_code_language,
+                          is_template, version, state, created_by, created_by_type, last_updated_by, created_time, updated_time)
+        VALUES (#{id}, #{name}, #{avatar}, #{tags}, #{description}, #{sourceCode},#{sourceCodeLanguage},
+                #{isTemplate}, #{version}, #{state}, #{createdBy}, #{createdByType}, #{lastUpdatedBy}, NOW(), NOW())
+    </insert>
+
+    <update id="updateTool" parameterType="com.close.ai.pojo.Tool">
+        UPDATE tool
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="tags != null">tags = #{tags},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="sourceCode != null">source_code = #{sourceCode},</if>
+            <if test="sourceCodeLanguage != null">source_code_language = #{sourceCodeLanguage},</if>
+            <if test="isTemplate != null">is_template = #{isTemplate},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="lastUpdatedBy != null">last_updated_by = #{lastUpdatedBy},</if>
+            updated_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.close.ai.mapper.UserMapper">
+
+    <resultMap id="UserMap" type="com.close.ai.pojo.User">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="organization_id" property="organizationId" jdbcType="BIGINT"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="recent_passwords" property="recentPasswords" jdbcType="VARCHAR"/>
+        <result column="phone_prefix" property="phonePrefix" jdbcType="VARCHAR"/>
+        <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 根据ID查找用户 -->
+    <select id="selectUserById" parameterType="Long" resultMap="UserMap">
+        SELECT id, organization_id, email, password, recent_passwords, phone_prefix, phone_number, name, avatar, state, created_time, updated_time
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据ID查找用户 -->
+    <select id="selectActiveUserById" parameterType="Long" resultMap="UserMap">
+        SELECT id, organization_id, email, password, recent_passwords, phone_prefix, phone_number, name, avatar, state, created_time, updated_time
+        FROM user
+        WHERE id = #{id} AND state = 0
+    </select>
+
+    <!-- 根据Email查找用户 -->
+    <select id="selectActiveUserByEmail" parameterType="String" resultMap="UserMap">
+        SELECT id, organization_id, email, password, recent_passwords, phone_prefix, phone_number, name, avatar, state, created_time, updated_time
+        FROM user
+        WHERE email = #{email} AND state = 0
+    </select>
+
+    <!-- 根据Phone查找用户 -->
+    <select id="selectActiveUserByPhone" parameterType="String" resultMap="UserMap">
+        SELECT id, organization_id, email, password, recent_passwords, phone_prefix, phone_number, name, avatar, state, created_time, updated_time
+        FROM user
+        WHERE phone_prefix = #{phonePrefix} AND phone_number = #{phoneNumber} AND state = 0
+    </select>
+
+    <select id="checkForDuplicateInformationBeforeCreating" resultType="Long">
+        SELECT id
+        FROM user
+        <where>
+            state = 0
+            <if test="email != null">
+                AND email = #{email}
+            </if>
+            <if test="phonePrefix != null and phoneNumber != null">
+                AND phone_prefix = #{phonePrefix}
+                AND phone_number = #{phoneNumber}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据Email模糊查找用户 -->
+    <select id="fuzzySelectActiveUserByEmail" parameterType="String" resultMap="UserMap">
+        SELECT id, organization_id, email, password, recent_passwords, phone_prefix, phone_number, name, avatar, state, created_time, updated_time
+        FROM user
+        WHERE email LIKE CONCAT('%', #{email}, '%') AND state = 0
+    </select>
+
+
+    <!-- 插入用户 -->
+    <insert id="insertUser" parameterType="com.close.ai.pojo.User">
+        INSERT INTO user (id, organization_id, email, password, recent_passwords, phone_prefix, phone_number,
+                          name, avatar, state, created_time, updated_time)
+        VALUES (#{id}, #{organizationId}, #{email}, #{password}, #{recentPasswords}, #{phonePrefix}, #{phoneNumber},
+                #{name}, #{avatar}, 0, NOW(), NOW())
+    </insert>
+
+    <update id="updateUserById" parameterType="com.close.ai.pojo.User">
+        UPDATE user
+        SET organization_id = #{organizationId},
+            password = #{password},
+            recent_passwords = #{recentPasswords},
+            phone_prefix = #{phonePrefix},
+            phone_number = #{phoneNumber},
+            name = #{name},
+            avatar = #{avatar},
+            updated_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateUserByEmail" parameterType="com.close.ai.pojo.User">
+        UPDATE user
+        <set>
+            <if test="organizationId != null">organization_id = #{organizationId},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="recentPasswords != null">recent_passwords = #{recentPasswords},</if>
+            <if test="phonePrefix != null">phone_prefix = #{phonePrefix},</if>
+            <if test="phoneNumber != null">phone_number = #{phoneNumber},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            updated_time = NOW()
+        </set>
+        WHERE email = #{email}
+    </update>
+
+    <!-- 注销账号 -->
+    <update id="deregisterAccount" parameterType="Long">
+        UPDATE user
+        SET state = 1,
+            updated_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+</mapper>

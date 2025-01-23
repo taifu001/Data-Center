@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.close.ai.mapper.AgentMapper">
+    <resultMap id="AgentMap" type="com.close.ai.pojo.Agent">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="agent_template_id" property="agentTemplateId" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="owner_type" property="ownerType" jdbcType="VARCHAR"/>
+        <result column="owner_id" property="ownerId" jdbcType="VARCHAR"/>
+        <result column="is_only_for_internal" property="isOnlyForInternal" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="TINYINT"/>
+        <result column="birthday" property="birthday" jdbcType="DATE"/>
+    </resultMap>
+
+    <select id="selectAgentById" resultMap="AgentMap">
+        SELECT id, agent_template_id, name, owner_type, owner_id, is_only_for_internal, state, birthday
+        FROM agent
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectActiveAgentsByOwner" resultMap="AgentMap">
+        SELECT id, agent_template_id, name, owner_type, owner_id, is_only_for_internal, state, birthday
+        FROM agent
+        WHERE owner_type = #{ownerType} AND owner_id = #{ownerId} AND state = 0
+    </select>
+
+    <insert id="insertAgent" parameterType="com.close.ai.pojo.Agent">
+        INSERT INTO agent (id, agent_template_id, name, owner_type, owner_id,
+                           is_only_for_internal, state, birthday)
+        VALUES (#{id}, #{agentTemplateId}, #{name}, #{ownerType}, #{ownerId},
+                #{isOnlyForInternal}, #{state}, #{birthday})
+    </insert>
+
+    <update id="updateAgent" parameterType="com.close.ai.pojo.Agent">
+        UPDATE agent
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="ownerType != null">owner_type = #{ownerType},</if>
+            <if test="ownerId != null">owner_id = #{ownerId},</if>
+            <if test="isOnlyForInternal != null">is_only_for_internal = #{isOnlyForInternal},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

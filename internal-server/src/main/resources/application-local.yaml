@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/datacenter?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+datacenter:
+  server:
+    # 分布式系统，每个数据中心和每台机器分配唯一的 datacenterId 和 workerId 以防止不同机器生成相同 Id
+    # datacenterId 和 workerId 的范围都是 0 ~ 31
+    datacenterId: 1
+    workerId: 1

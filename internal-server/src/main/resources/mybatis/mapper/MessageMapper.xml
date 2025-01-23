@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.close.ai.mapper.MessageMapper">
+    <resultMap id="MessageMap" type="com.close.ai.pojo.Message">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="conversation_id" property="conversationId" jdbcType="BIGINT"/>
+        <result column="message_type" property="messageType" jdbcType="VARCHAR"/>
+        <result column="text_content" property="textContent" jdbcType="VARCHAR"/>
+        <result column="file_id" property="fileId" jdbcType="VARCHAR"/>
+        <result column="storage_path" property="storagePath" jdbcType="VARCHAR"/>
+        <result column="sent_time" property="sentTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectMessageById" resultMap="MessageMap">
+        SELECT id, conversation_id, message_type, text_content, file_id, storage_path, sent_time
+        FROM message
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertMessage" parameterType="com.close.ai.pojo.Message">
+        INSERT INTO message (id, conversation_id, message_type, text_content, file_id, storage_path, sent_time)
+        VALUES (#{id}, #{conversationId}, #{messageType}, #{textContent}, #{fileId}, #{storagePath}, NOW())
+    </insert>
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.close.ai.mapper.GroupMapper">
+    <resultMap id="GroupMap" type="com.close.ai.pojo.Group">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="organization_id" property="organizationId" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result column="limit_user_amount" property="limitUserAmount" jdbcType="INTEGER"/>
+        <result column="user_access_restriction" property="userAccessRestriction" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectGroupById" resultMap="GroupMap">
+        SELECT id, organization_id, name, avatar, description, limit_user_amount, user_access_restriction, created_time, updated_time
+        FROM `group`
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertGroup" parameterType="com.close.ai.pojo.Group">
+        INSERT INTO `group` (id, organization_id, name, avatar, description, limit_user_amount, user_access_restriction,
+                             created_time, updated_time)
+        VALUES (#{id}, #{organizationId}, #{name}, #{avatar}, #{description}, #{limitUserAmount}, #{userAccessRestriction},
+                NOW(), NOW())
+    </insert>
+
+    <update id="updateGroup" parameterType="com.close.ai.pojo.Group">
+        UPDATE `group`
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="limitUserAmount != null">limit_user_amount = #{limitUserAmount},</if>
+            <if test="userAccessRestriction != null">user_access_restriction = #{userAccessRestriction},</if>
+            updated_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper>

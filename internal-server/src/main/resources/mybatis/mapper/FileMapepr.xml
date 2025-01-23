@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.close.ai.mapper.FileMapper">
+    <resultMap id="FileMap" type="com.close.ai.pojo.File">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="filename" property="filename" jdbcType="VARCHAR"/>
+        <result column="mime_type" property="mimeType" jdbcType="VARCHAR"/>
+        <result property="extension" column="extension" jdbcType="VARCHAR"/>
+        <result property="size" column="size" jdbcType="BIGINT"/>
+        <result column="storage_path" property="storagePath" jdbcType="VARCHAR"/>
+        <result column="owner_type" property="ownerType" jdbcType="VARCHAR"/>
+        <result column="owner_id" property="ownerId" jdbcType="BIGINT"/>
+        <result column="uploaded_time" property="uploadedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectFileById" resultMap="FileMap">
+        SELECT id, filename, mime_type, extension, size, storage_path, owner_type, owner_id, uploaded_time
+        FROM file
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertFile" parameterType="com.close.ai.pojo.File">
+        INSERT INTO file (id, filename, mime_type, extension, size, storage_path, owner_type, owner_id, uploaded_time)
+        VALUES (#{id}, #{filename}, #{mimeType}, #{extension}, #{size}, #{storagePath}, #{ownerType}, #{ownerId}, NOW())
+    </insert>
+</mapper>

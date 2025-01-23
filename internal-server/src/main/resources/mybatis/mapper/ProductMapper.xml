@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.close.ai.mapper.ProductMapper">
+    <resultMap id="ProductMap" type="com.close.ai.pojo.Product">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="usage_type" property="usageType" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="introduction" property="introduction" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="released_time" property="releasedTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectProductById" parameterType="Long" resultMap="ProductMap">
+        SELECT id, type, usage_type, name, version, state, introduction, price, released_time, updated_time
+        FROM product
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectProductByName" parameterType="String" resultMap="ProductMap">
+        SELECT id, type, usage_type, name, version, state, introduction, price, released_time, updated_time
+        FROM product
+        WHERE name = #{name} AND state = 0
+    </select>
+
+    <select id="selectAllActiveProducts" resultMap="ProductMap">
+        SELECT id, type, usage_type, name, version, state, introduction, price, released_time, updated_time
+        FROM product
+        WHERE state = 0
+    </select>
+
+    <update id="releaseProduct" parameterType="com.close.ai.pojo.Product">
+        UPDATE product
+        <set>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="usageType != null">
+                usage_type = #{usageType},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="introduction != null">
+                introduction = #{introduction},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            released_time = NOW(),
+            updated_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insertProduct" parameterType="com.close.ai.pojo.Product">
+        INSERT INTO product (id, type, usage_type, name, version, state, introduction,
+                             price, released_time, updated_time)
+        VALUES (#{id}, #{type}, #{usageType}, #{name}, #{version}, #{state}, #{introduction},
+                #{price}, #{releasedTime}, NOW())
+    </insert>
+
+    <update id="updateProductById" parameterType="com.close.ai.pojo.Product">
+        UPDATE product
+        <set>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="usageType != null">
+                usage_type = #{usageType},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="introduction != null">
+                introduction = #{introduction},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            updated_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

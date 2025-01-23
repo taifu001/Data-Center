@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.close.ai.mapper.RobotAgentMapper">
+    <resultMap id="RobotAgentMap" type="com.close.ai.pojo.RobotAgent">
+        <id column="robot_id" property="robotId" />
+        <id column="agent_id" property="agentId" />
+    </resultMap>
+
+    <insert id="insertRobotAgent" parameterType="com.close.ai.pojo.RobotAgent">
+        INSERT INTO robot_agent (robot_id, agent_id)
+        VALUES (#{robotId}, #{agentId})
+    </insert>
+
+    <delete id="deleteRobotAgent" parameterType="com.close.ai.pojo.RobotAgent">
+        DELETE FROM robot_agent
+        WHERE robot_id = #{robotId} AND agent_id = #{agentId}
+    </delete>
+</mapper>

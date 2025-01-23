@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.close.ai.mapper.RobotMapper">
+    <resultMap id="RobotMap" type="com.close.ai.pojo.Robot">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="product_id" property="productId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="VARCHAR"/>
+        <result column="introduction" property="introduction" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="owner_type" property="ownerType" jdbcType="VARCHAR"/>
+        <result column="owner_id" property="ownerId" jdbcType="BIGINT"/>
+        <result column="is_only_for_internal" property="isOnlyForInternal" jdbcType="TINYINT"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectRobotById" parameterType="Long" resultMap="RobotMap">
+        SELECT id, product_id, name, version, introduction, state, owner_type, owner_id,
+               is_only_for_internal, created_time, updated_time
+        FROM robot
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertRobot" parameterType="com.close.ai.pojo.Robot">
+        INSERT INTO robot (id, product_id, name, version, introduction, state, owner_type, owner_id,
+                           is_only_for_internal, created_time, updated_time)
+        VALUES (#{id}, #{productId}, #{name}, #{version}, #{introduction}, 0, #{ownerType}, #{ownerId},
+                #{isOnlyForInternal}, NOW(), NOW())
+    </insert>
+
+    <update id="updateRobot" parameterType="com.close.ai.pojo.Robot">
+        UPDATE robot
+        <set>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="ownerType != null">owner_type = #{ownerType},</if>
+            <if test="ownerId != null">owner_id = #{ownerId},</if>
+            <if test="isOnlyForInternal != null">is_only_for_internal = #{isOnlyForInternal},</if>
+            updated_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper>
