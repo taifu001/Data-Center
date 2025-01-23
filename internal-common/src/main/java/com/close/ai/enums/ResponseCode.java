@@ -3,7 +3,7 @@ package com.close.ai.enums;
 import lombok.Getter;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-01-19
  */
 @Getter
@@ -33,6 +33,8 @@ public enum ResponseCode {
     PRODUCT_INSERT_ERROR(100006010, "产品插入失败"),
     PRODUCT_UPDATE_ERROR(100006011, "产品更新失败"),
     PRODUCT_RELEASE_ERROR(100006012, "产品发布失败"),
+
+    ROBOT_INSERT_ERROR(100007010, "产品实例插入失败"),
     ;
 
     private final int code;

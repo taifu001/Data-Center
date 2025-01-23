@@ -4,7 +4,7 @@ import com.close.ai.dto.UserDTO;
 import lombok.Data;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-1-22
  */
 @Data

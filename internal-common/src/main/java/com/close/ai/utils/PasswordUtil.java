@@ -3,7 +3,7 @@ package com.close.ai.utils;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
- * @author ctf
+ * @author nbwyctf
  * @since 2024-12-19
  */
 public class PasswordUtil {

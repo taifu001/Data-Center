@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-01-23
  */
 public class JacksonUtil {
@@ -29,7 +29,7 @@ public class JacksonUtil {
         }
     }
 
-    public static String listToJsonString(List<String> list) {
+    public static String stringListToJson(List<String> list) {
         if (list == null) {
             return "[]";
         }
@@ -40,5 +40,4 @@ public class JacksonUtil {
             return "[]";
         }
     }
-
 }

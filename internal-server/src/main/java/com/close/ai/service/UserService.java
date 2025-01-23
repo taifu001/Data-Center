@@ -1,6 +1,7 @@
 package com.close.ai.service;
 
 import com.close.ai.dto.UserDTO;
+import com.close.ai.dto.converter.UserDTOConverter;
 import com.close.ai.enums.ResponseCode;
 import com.close.ai.mapper.UserMapper;
 import com.close.ai.pojo.User;
@@ -13,20 +14,27 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-01-20
  */
 @Service
 public class UserService {
     private final UserMapper userMapper;
+
     private final HumanService humanService;
     private final OrganizationService organizationService;
 
+    private final UserDTOConverter userDTOConverter;
+
     @Autowired
-    public UserService(UserMapper userMapper, HumanService humanService, OrganizationService organizationService) {
+    public UserService(UserMapper userMapper,
+                       HumanService humanService,
+                       OrganizationService organizationService,
+                       UserDTOConverter userDTOConverter) {
         this.userMapper = userMapper;
         this.humanService = humanService;
         this.organizationService = organizationService;
+        this.userDTOConverter = userDTOConverter;
     }
 
 
@@ -46,7 +54,7 @@ public class UserService {
         if(user == null){
             return null;
         }
-        return UserDTO.fromEntity(user);
+        return userDTOConverter.fromEntity(user);
     }
 
     /**
@@ -63,7 +71,7 @@ public class UserService {
         if(user == null){
             return null;
         }
-        return UserDTO.fromEntity(user);
+        return userDTOConverter.fromEntity(user);
     }
 
     public ResponseCode checkUserDtoBeforeCreateUser(UserDTO userDTO){
@@ -100,7 +108,7 @@ public class UserService {
             return code;
         }
 
-        User user = UserDTO.toEntity(userDTO);
+        User user = userDTOConverter.toEntity(userDTO);
         user.setId(IdUtil.getSnowflake().nextId());
         user.setOrganizationId(organizationService.getOrganizationId("REGULAR USER"));
         // 密码加密
@@ -124,7 +132,7 @@ public class UserService {
             return code;
         }
 
-        User user = UserDTO.toEntity(userDTO);
+        User user = userDTOConverter.toEntity(userDTO);
         user.setId(IdUtil.getSnowflake().nextId());
         user.setOrganizationId(organizationService.getOrganizationId("SYSTEM"));
         // 密码加密

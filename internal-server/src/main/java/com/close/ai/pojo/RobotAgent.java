@@ -3,7 +3,7 @@ package com.close.ai.pojo;
 import lombok.Data;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-1-22
  */
 @Data

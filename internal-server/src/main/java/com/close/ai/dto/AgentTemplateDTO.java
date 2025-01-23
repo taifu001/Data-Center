@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-01-23
  */
 @Data
@@ -39,44 +39,4 @@ public class AgentTemplateDTO {
     private LocalDateTime releasedTime;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
-
-    public static AgentTemplateDTO fromEntity(AgentTemplate agentTemplate) {
-        AgentTemplateDTO dto = new AgentTemplateDTO();
-        dto.setId(agentTemplate.getId());
-        dto.setName(agentTemplate.getName());
-        dto.setDescription(agentTemplate.getDescription());
-        dto.setAvatar(agentTemplate.getAvatar());
-        dto.setVersion(agentTemplate.getVersion());
-        dto.setFunctionType(agentTemplate.getFunctionType());
-        dto.setSubType(agentTemplate.getSubType());
-        dto.setState(agentTemplate.getState());
-        dto.setCreatorType(agentTemplate.getCreatorType());
-        dto.setCreator(agentTemplate.getCreator());
-        dto.setUpdaterType(agentTemplate.getUpdaterType());
-        dto.setUpdater(agentTemplate.getUpdater());
-        dto.setReleasedTime(agentTemplate.getReleasedTime());
-        dto.setCreatedTime(agentTemplate.getCreatedTime());
-        dto.setUpdatedTime(agentTemplate.getUpdatedTime());
-        return dto;
-    }
-
-    public static AgentTemplate toEntity(AgentTemplateDTO dto) {
-        AgentTemplate agentTemplate = new AgentTemplate();
-        agentTemplate.setId(dto.getId());
-        agentTemplate.setName(dto.getName());
-        agentTemplate.setDescription(dto.getDescription());
-        agentTemplate.setAvatar(dto.getAvatar());
-        agentTemplate.setVersion(dto.getVersion());
-        agentTemplate.setFunctionType(dto.getFunctionType());
-        agentTemplate.setSubType(dto.getSubType());
-        agentTemplate.setState(dto.getState());
-        agentTemplate.setCreatorType(dto.getCreatorType());
-        agentTemplate.setCreator(dto.getCreator());
-        agentTemplate.setUpdaterType(dto.getUpdaterType());
-        agentTemplate.setUpdater(dto.getUpdater());
-        agentTemplate.setReleasedTime(dto.getReleasedTime());
-        agentTemplate.setCreatedTime(dto.getCreatedTime());
-        agentTemplate.setUpdatedTime(dto.getUpdatedTime());
-        return agentTemplate;
-    }
 }

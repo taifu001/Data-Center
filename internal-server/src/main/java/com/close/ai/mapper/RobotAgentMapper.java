@@ -4,7 +4,7 @@ import com.close.ai.pojo.RobotAgent;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-01-23
  */
 @Mapper

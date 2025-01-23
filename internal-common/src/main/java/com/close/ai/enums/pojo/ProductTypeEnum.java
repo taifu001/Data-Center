@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-01-2
  */
 @Getter

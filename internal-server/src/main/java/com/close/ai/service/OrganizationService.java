@@ -1,6 +1,7 @@
 package com.close.ai.service;
 
 import com.close.ai.dto.OrganizationDTO;
+import com.close.ai.dto.converter.OrganizationDTOConverter;
 import com.close.ai.enums.ResponseCode;
 import com.close.ai.enums.pojo.OrganizationTypeEnum;
 import com.close.ai.mapper.OrganizationMapper;
@@ -17,18 +18,21 @@ import java.util.Map;
 import static com.close.ai.enums.ResponseCode.*;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-01-20
  */
 @Service
 public class OrganizationService {
     private final OrganizationMapper organizationMapper;
+    private final OrganizationDTOConverter organizationDTOConverter;
     private Map<String, Long> ORGANIZATION_MAP = new HashMap<>();
 
     // 构造器注入
     @Autowired
-    public OrganizationService(OrganizationMapper organizationMapper) {
+    public OrganizationService(OrganizationMapper organizationMapper,
+                               OrganizationDTOConverter organizationDTOConverter) {
         this.organizationMapper = organizationMapper;
+        this.organizationDTOConverter = organizationDTOConverter;
     }
 
     @PostConstruct
@@ -65,7 +69,7 @@ public class OrganizationService {
         if (organization == null) {
             return null;
         }
-        return OrganizationDTO.fromEntity(organization);
+        return organizationDTOConverter.fromEntity(organization);
     }
 
 

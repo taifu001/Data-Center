@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-1-21
  */
 @Data
@@ -22,6 +22,4 @@ public class MessageEventSummary {
 
     private LocalDateTime firstMessageTime;
     private LocalDateTime lastMessageTime;
-
-
 }

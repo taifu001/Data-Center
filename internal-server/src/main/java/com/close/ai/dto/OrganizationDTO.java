@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-01-20
  */
 @Data
@@ -25,16 +25,4 @@ public class OrganizationDTO {
     private Integer state;
 
     private LocalDateTime createdTime;
-
-
-
-    public static OrganizationDTO fromEntity(Organization organization) {
-        OrganizationDTO dto = new OrganizationDTO();
-        dto.id = organization.getId();
-        dto.name = organization.getName();
-        dto.state = organization.getState();
-        dto.createdTime = organization.getCreatedTime();
-        return dto;
-    }
-
 }

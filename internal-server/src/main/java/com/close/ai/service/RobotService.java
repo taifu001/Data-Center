@@ -1,33 +1,37 @@
 package com.close.ai.service;
 
 import com.close.ai.dto.RobotDTO;
+import com.close.ai.dto.converter.RobotDTOConverter;
 import com.close.ai.enums.ResponseCode;
 import com.close.ai.mapper.RobotMapper;
+import com.close.ai.pojo.Robot;
 import org.springframework.stereotype.Service;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-01-23
  */
 @Service
 public class RobotService {
     private final RobotMapper robotMapper;
 
-    public RobotService(RobotMapper robotMapper) {
+    private final RobotDTOConverter robotDTOConverter;
+
+    public RobotService(RobotMapper robotMapper,
+                        RobotDTOConverter robotDTOConverter) {
         this.robotMapper = robotMapper;
+        this.robotDTOConverter = robotDTOConverter;
     }
 
     public ResponseCode createRobot(RobotDTO robotDTO) {
-//        if (robotDTO == null || robotDTO.) {
-//            return ResponseCode.PARAMETER_NULL;
-//        }
+        if (robotDTO == null || robotDTO.getProductId() == null ||
+                robotDTO.getOwnerType() == null || robotDTO.getOwnerId() == null) {
+            return ResponseCode.PARAMETER_NULL;
+        }
 
-//        Robot robot = RobotDTO.toEntity(robotDTO);
-//        Integer result = robotMapper.insertRobot(robot);
-//        if (result > 0) {
-//            return ResponseCode.OK;
-//        }
-//        return ResponseCode.SERVER_INTERNAL_ERROR;
+        Robot robot = robotDTOConverter.toEntity(robotDTO);
+        Integer res = robotMapper.insertRobot(robot);
+        if (res != 1) {return ResponseCode.ROBOT_INSERT_ERROR;}
         return ResponseCode.OK;
     }
 }

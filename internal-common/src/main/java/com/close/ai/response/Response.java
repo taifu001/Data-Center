@@ -4,7 +4,7 @@ import com.close.ai.enums.ResponseCode;
 import lombok.Data;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-01-19
  */
 @Data

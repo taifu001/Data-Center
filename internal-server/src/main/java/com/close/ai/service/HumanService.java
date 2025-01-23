@@ -1,5 +1,6 @@
 package com.close.ai.service;
 
+import com.close.ai.dto.converter.HumanDTOConverter;
 import com.close.ai.enums.ResponseCode;
 import com.close.ai.mapper.HumanMapper;
 import com.close.ai.pojo.Human;
@@ -7,15 +8,19 @@ import com.close.ai.utils.IdUtil;
 import org.springframework.stereotype.Service;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-01-21
  */
 @Service
 public class HumanService {
     private final HumanMapper humanMapper;
 
-    public HumanService(HumanMapper humanMapper) {
+    private final HumanDTOConverter humanDTOConverter;
+
+    public HumanService(HumanMapper humanMapper,
+                        HumanDTOConverter humanDTOConverter) {
         this.humanMapper = humanMapper;
+        this.humanDTOConverter = humanDTOConverter;
     }
 
     public ResponseCode createBlankHumanWithUserId(Long userId) {

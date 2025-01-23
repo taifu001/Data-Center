@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author taifu
+ * @author nbwyctf
  * @since 2025-01-20
  */
 @Data
