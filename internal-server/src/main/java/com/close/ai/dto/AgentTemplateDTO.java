@@ -3,7 +3,6 @@ package com.close.ai.dto;
 import com.close.ai.enums.pojo.AgentTemplateFunctionSubTypeEnum;
 import com.close.ai.enums.pojo.AgentTemplateFunctionTypeEnum;
 import com.close.ai.enums.pojo.OwnerTypeEnum;
-import com.close.ai.pojo.AgentTemplate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
