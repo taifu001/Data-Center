@@ -1,16 +1,20 @@
-package com.close.ai.pojo;
+package com.close.ai.dto;
 
 import com.close.ai.enums.pojo.SourceCodeLanguageEnum;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 /**
  * @author nbwyctf
- * @since 2025-1-20
+ * @since 2025-01-24
  */
 @Data
-public class Tool {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ToolDTO {
     private Long id;
     private String name;
     private String avatar;

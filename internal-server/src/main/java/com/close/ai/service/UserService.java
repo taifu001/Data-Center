@@ -37,7 +37,6 @@ public class UserService {
         this.userDTOConverter = userDTOConverter;
     }
 
-
     /**
      * 根据id获取用户信息
      *
