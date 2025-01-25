@@ -5,7 +5,6 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="product_id" property="productId" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="version" property="version" jdbcType="VARCHAR"/>
         <result column="introduction" property="introduction" jdbcType="VARCHAR"/>
         <result column="state" property="state" jdbcType="INTEGER"/>
         <result column="owner_type" property="ownerType" jdbcType="VARCHAR"/>
@@ -16,16 +15,16 @@
     </resultMap>
 
     <select id="selectRobotById" parameterType="Long" resultMap="RobotMap">
-        SELECT id, product_id, name, version, introduction, state, owner_type, owner_id,
+        SELECT id, product_id, name, introduction, state, owner_type, owner_id,
                is_only_for_internal, created_time, updated_time
         FROM robot
         WHERE id = #{id}
     </select>
 
     <insert id="insertRobot" parameterType="com.close.ai.pojo.Robot">
-        INSERT INTO robot (id, product_id, name, version, introduction, state, owner_type, owner_id,
+        INSERT INTO robot (id, product_id, name, introduction, state, owner_type, owner_id,
                            is_only_for_internal, created_time, updated_time)
-        VALUES (#{id}, #{productId}, #{name}, #{version}, #{introduction}, 0, #{ownerType}, #{ownerId},
+        VALUES (#{id}, #{productId}, #{name}, #{introduction}, 0, #{ownerType}, #{ownerId},
                 #{isOnlyForInternal}, NOW(), NOW())
     </insert>
 
@@ -34,7 +33,6 @@
         <set>
             <if test="productId != null">product_id = #{productId},</if>
             <if test="name != null">name = #{name},</if>
-            <if test="version != null">version = #{version},</if>
             <if test="introduction != null">introduction = #{introduction},</if>
             <if test="state != null">state = #{state},</if>
             <if test="ownerType != null">owner_type = #{ownerType},</if>

@@ -1,7 +1,7 @@
 package com.close.ai.controller;
 
 import com.close.ai.enums.ResponseCode;
-import com.close.ai.request.OrganizationCreateRequest;
+import com.close.ai.request.create.OrganizationCreateRequest;
 import com.close.ai.response.Response;
 import com.close.ai.service.OrganizationService;
 import org.springframework.web.bind.annotation.PostMapping;

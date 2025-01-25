@@ -2,6 +2,7 @@ package com.close.ai.dto;
 
 import com.close.ai.enums.pojo.OwnerTypeEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,11 +15,11 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class RobotDTO {
     private Long id;
     private Long productId;
     private String name;
-    private String version;
     private String introduction;
     private Integer state;
     private OwnerTypeEnum ownerType;

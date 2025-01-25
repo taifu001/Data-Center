@@ -5,6 +5,7 @@ import com.close.ai.dto.converter.RobotDTOConverter;
 import com.close.ai.enums.ResponseCode;
 import com.close.ai.mapper.RobotMapper;
 import com.close.ai.pojo.Robot;
+import com.close.ai.utils.IdUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,6 +31,7 @@ public class RobotService {
         }
 
         Robot robot = robotDTOConverter.toEntity(robotDTO);
+        robot.setId(IdUtil.getSnowflake().nextId());
         Integer res = robotMapper.insertRobot(robot);
         if (res != 1) {return ResponseCode.ROBOT_INSERT_ERROR;}
         return ResponseCode.OK;

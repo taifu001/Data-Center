@@ -2,7 +2,7 @@ package com.close.ai.controller;
 
 import com.close.ai.dto.UserDTO;
 import com.close.ai.enums.ResponseCode;
-import com.close.ai.request.UserCreateRequest;
+import com.close.ai.request.create.UserCreateRequest;
 import com.close.ai.response.Response;
 import com.close.ai.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,16 +26,14 @@ public class UserController {
     // 暂时用于测试
     @PostMapping("/create/RegularUser/withBlankHuman")
     public Response<ResponseCode> createRegularUserWithBlankHuman(@RequestBody UserCreateRequest request) {
-        UserDTO userDTO = request.toUserDTO();
-        ResponseCode code = userService.createRegularUser(userDTO, true);
-        return Response.response(code);
+        UserDTO userDTO = request.toDTO();
+        return Response.response(userService.createRegularUser(userDTO, true));
     }
 
     // 暂时用于测试
     @PostMapping("/create/SystemUser/withBlankHuman")
     public Response<ResponseCode> createSystemUserWithBlankHuman(@RequestBody UserCreateRequest request) {
-        UserDTO userDTO = request.toUserDTO();
-        ResponseCode code = userService.createSystemUser(userDTO, true);
-        return Response.response(code);
+        UserDTO userDTO = request.toDTO();
+        return Response.response(userService.createSystemUser(userDTO, true));
     }
 }

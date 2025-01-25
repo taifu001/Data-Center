@@ -5,6 +5,7 @@ import com.close.ai.dto.converter.ProductDTOConverter;
 import com.close.ai.enums.ResponseCode;
 import com.close.ai.mapper.ProductMapper;
 import com.close.ai.pojo.Product;
+import com.close.ai.utils.IdUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -32,6 +33,11 @@ public class ProductService {
             return ResponseCode.PRODUCT_NAME_IS_REPEAT;
         }
         Product product = productDTOConverter.toEntity(productDTO);
+        product.setId(IdUtil.getSnowflake().nextId());
+        // 默认新创建的产品是state=1未发布的产品.
+        if(product.getState() == null) {
+            product.setState(1);
+        }
         Integer res = productMapper.insertProduct(product);
         if (res != 1) { return ResponseCode.PRODUCT_INSERT_ERROR; }
         return ResponseCode.OK;

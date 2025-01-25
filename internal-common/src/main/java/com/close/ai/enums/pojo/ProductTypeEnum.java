@@ -10,9 +10,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ProductTypeEnum {
-    PHYSICAL_ROBOT("PhysicalRobot"),
+    PHYSICAL_PRODUCT("PhysicalProduct"),
     PHYSICAL_COMPONENT("PhysicalComponent"),
-    VIRTUAL_ROBOT("VirtualRobot"),
+    VIRTUAL_PRODUCT("VirtualProduct"),
     ;
     private final String type;
 

@@ -1,4 +1,4 @@
-package com.close.ai.request;
+package com.close.ai.request.create;
 
 import lombok.Data;
 

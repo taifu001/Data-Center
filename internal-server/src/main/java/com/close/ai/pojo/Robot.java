@@ -14,7 +14,6 @@ public class Robot {
     private Long id;
     private Long productId;
     private String name;
-    private String version;
     private String introduction;
     private Integer state;
     private OwnerTypeEnum ownerType;

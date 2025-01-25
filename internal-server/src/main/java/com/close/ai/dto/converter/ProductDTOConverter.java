@@ -12,5 +12,5 @@ import org.mapstruct.Mapper;
 public interface ProductDTOConverter {
     ProductDTO fromEntity(Product product);
 
-    Product toEntity(ProductDTO dto);
+    Product toEntity(ProductDTO productDTO);
 }

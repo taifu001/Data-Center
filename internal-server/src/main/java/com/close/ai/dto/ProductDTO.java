@@ -3,6 +3,7 @@ package com.close.ai.dto;
 import com.close.ai.enums.pojo.ProductTypeEnum;
 import com.close.ai.enums.pojo.ProductUsageTypeEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ProductDTO {
     private Long id;
     private ProductTypeEnum type;
