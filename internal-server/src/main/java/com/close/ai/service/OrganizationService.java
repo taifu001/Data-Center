@@ -61,11 +61,13 @@ public class OrganizationService {
      * @param id 组织ID
      * @return 组织信息
      */
-    public OrganizationDTO getOrganizationById(Long id) {
+    public OrganizationDTO getOrganizationById(Long id, boolean isActive) {
         if (id == null) {
             return null;
         }
-        Organization organization = organizationMapper.selectOrganizationById(id);
+        Organization organization = isActive
+                ? organizationMapper.selectActiveOrganizationById(id)
+                : organizationMapper.selectOrganizationById(id);
         if (organization == null) {
             return null;
         }

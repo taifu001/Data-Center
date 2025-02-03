@@ -19,6 +19,12 @@
         WHERE id = #{id}
     </select>
 
+    <select id="selectActiveGroupById" resultMap="GroupMap">
+        SELECT id, organization_id, name, avatar, description, limit_user_amount, user_access_restriction, created_time, updated_time
+        FROM `group`
+        WHERE id = #{id} AND state = 0
+    </select>
+
     <insert id="insertGroup" parameterType="com.close.ai.pojo.Group">
         INSERT INTO `group` (id, organization_id, name, avatar, description, limit_user_amount, user_access_restriction,
                              created_time, updated_time)

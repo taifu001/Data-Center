@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 /**
  * @author nbwyctf
- * @since 2025-1-25
+ * @since 2025-01-25
  */
 @Data
 public class ProductCreateRequest {
@@ -25,13 +25,13 @@ public class ProductCreateRequest {
 
     public ProductDTO toDTO() {
         return ProductDTO.builder()
-                .type(this.type)
-                .usageType(this.usageType)
-                .name(this.name)
-                .version(this.version)
-                .state(this.state)
-                .introduction(this.introduction)
-                .price(this.price)
+                .type(type)
+                .usageType(usageType)
+                .name(name)
+                .version(version)
+                .state(state)
+                .introduction(introduction)
+                .price(price)
                 .build();
     }
 

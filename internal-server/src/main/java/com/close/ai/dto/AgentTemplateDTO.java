@@ -4,6 +4,7 @@ import com.close.ai.enums.pojo.AgentTemplateFunctionSubTypeEnum;
 import com.close.ai.enums.pojo.AgentTemplateFunctionTypeEnum;
 import com.close.ai.enums.pojo.OwnerTypeEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AgentTemplateDTO {
     private Long id;
     private String name;

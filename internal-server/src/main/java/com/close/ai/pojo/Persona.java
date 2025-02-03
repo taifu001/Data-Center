@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 /**
  * @author nbwyctf
- * @since 2025-1-23
+ * @since 2025-01-23
  */
 @Data
 public class Persona {

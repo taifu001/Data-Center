@@ -1,6 +1,5 @@
 package com.close.ai.controller;
 
-import com.close.ai.dto.UserDTO;
 import com.close.ai.enums.ResponseCode;
 import com.close.ai.request.create.UserCreateRequest;
 import com.close.ai.response.Response;
@@ -26,14 +25,12 @@ public class UserController {
     // 暂时用于测试
     @PostMapping("/create/RegularUser/withBlankHuman")
     public Response<ResponseCode> createRegularUserWithBlankHuman(@RequestBody UserCreateRequest request) {
-        UserDTO userDTO = request.toDTO();
-        return Response.response(userService.createRegularUser(userDTO, true));
+        return Response.response(userService.createRegularUser(request, true));
     }
 
     // 暂时用于测试
     @PostMapping("/create/SystemUser/withBlankHuman")
     public Response<ResponseCode> createSystemUserWithBlankHuman(@RequestBody UserCreateRequest request) {
-        UserDTO userDTO = request.toDTO();
-        return Response.response(userService.createSystemUser(userDTO, true));
+        return Response.response(userService.createSystemUser(request, true));
     }
 }

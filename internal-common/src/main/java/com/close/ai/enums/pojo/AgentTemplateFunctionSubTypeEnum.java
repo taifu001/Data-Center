@@ -16,6 +16,7 @@ public enum AgentTemplateFunctionSubTypeEnum {
     TEXT_TO_IMAGE("textToImage"),
     CHAT("chat"),
     OTHER("other"),
+    UNDEFINED("undefined")
     ;
     private final String functionSubType;
 

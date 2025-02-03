@@ -3,22 +3,44 @@
 <mapper namespace="com.close.ai.mapper.MessageMapper">
     <resultMap id="MessageMap" type="com.close.ai.pojo.Message">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="conversation_id" property="conversationId" jdbcType="BIGINT"/>
         <result column="message_type" property="messageType" jdbcType="VARCHAR"/>
+        <result column="interaction_type" property="interactionType" jdbcType="VARCHAR"/>
         <result column="text_content" property="textContent" jdbcType="VARCHAR"/>
-        <result column="file_id" property="fileId" jdbcType="VARCHAR"/>
-        <result column="storage_path" property="storagePath" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="TINYINT"/>
+        <result column="from_type" property="fromType" jdbcType="BIGINT"/>
+        <result column="from_id" property="fromId" jdbcType="VARCHAR"/>
+        <result column="to_type" property="toType" jdbcType="VARCHAR"/>
+        <result column="to_id" property="toId" jdbcType="BIGINT"/>
+        <result column="file_id" property="fileId" jdbcType="BIGINT"/>
+        <result column="is_group" property="isGroup" jdbcType="VARCHAR"/>
+        <result column="group_id" property="groupId" jdbcType="BIGINT"/>
         <result column="sent_time" property="sentTime" jdbcType="TIMESTAMP"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <select id="selectMessageById" resultMap="MessageMap">
-        SELECT id, conversation_id, message_type, text_content, file_id, storage_path, sent_time
+        SELECT id, message_type, interaction_type, text_content, state, from_type, from_id, to_type, to_id,
+               file_id, is_group, group_id, sent_time, created_time, updated_time
         FROM message
         WHERE id = #{id}
     </select>
 
     <insert id="insertMessage" parameterType="com.close.ai.pojo.Message">
-        INSERT INTO message (id, conversation_id, message_type, text_content, file_id, storage_path, sent_time)
-        VALUES (#{id}, #{conversationId}, #{messageType}, #{textContent}, #{fileId}, #{storagePath}, NOW())
+        INSERT INTO message (id, message_type, interaction_type, text_content, state, from_type, from_id, to_type, to_id,
+                             file_id, is_group, group_id, sent_time, created_time, updated_time)
+        VALUES (#{id}, #{messageType}, #{interactionType}, #{textContent}, #{state}, #{fromType}, #{fromId}, #{toType}, #{toId},
+                #{fileId}, #{isGroup}, #{groupId}, #{sentTime}, NOW(), NOW())
+    </insert>
+
+    <insert id="batchInsertMessages" parameterType="List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO message (id, message_type, interaction_type, text_content, state, from_type, from_id, to_type, to_id,
+                             file_id, is_group, group_id, sent_time, created_time, updated_time)
+        VALUES
+        <foreach collection="list" item="msg" separator=",">
+            (#{msg.id}, #{msg.messageType}, #{msg.interactionType}, #{msg.textContent}, #{msg.state},
+             #{msg.fromType}, #{msg.fromId},#{msg.toType}, #{msg.toId},
+             #{msg.fileId}, #{msg.isGroup}, #{msg.groupId}, #{msg.sentTime}, NOW(), NOW())
+        </foreach>
     </insert>
 </mapper>

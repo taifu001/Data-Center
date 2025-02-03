@@ -1,7 +1,7 @@
 package com.close.ai.dto.converter;
 
 import com.close.ai.dto.AgentDTO;
-import com.close.ai.pojo.AgentTemplate;
+import com.close.ai.pojo.Agent;
 import org.mapstruct.Mapper;
 
 /**
@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring")
 public interface AgentDTOConverter {
-    AgentDTO fromEntity(AgentTemplate agentTemplate);
+    AgentDTO fromEntity(Agent agentTemplate);
 
-    AgentTemplate toEntity(AgentDTO dto);
+    Agent toEntity(AgentDTO dto);
 }

@@ -5,6 +5,7 @@ import com.close.ai.dto.converter.UserDTOConverter;
 import com.close.ai.enums.ResponseCode;
 import com.close.ai.mapper.UserMapper;
 import com.close.ai.pojo.User;
+import com.close.ai.request.create.UserCreateRequest;
 import com.close.ai.utils.IdUtil;
 import com.close.ai.utils.PasswordUtil;
 import com.close.ai.utils.ValidationUtil;
@@ -96,26 +97,27 @@ public class UserService {
 
     /**
      * 创建个人用户
-     * @param userDTO 用户信息
+     * @param request 用户信息
      * @param createBlankHuman 是否创建空白人物
      * @return 响应码
      */
-    public ResponseCode createRegularUser(UserDTO userDTO,
+    public ResponseCode createRegularUser(UserCreateRequest request,
                                           Boolean createBlankHuman) {
-        ResponseCode code = checkUserDtoBeforeCreateUser(userDTO);
+        UserDTO dto = request.toDTO();
+        ResponseCode code = checkUserDtoBeforeCreateUser(dto);
         if(code != ResponseCode.OK){
             return code;
         }
 
-        User user = userDTOConverter.toEntity(userDTO);
+        User user = userDTOConverter.toEntity(dto);
         user.setId(IdUtil.getSnowflake().nextId());
         user.setOrganizationId(organizationService.getOrganizationId("REGULAR USER"));
         // 密码加密
-        String hashedPassword = PasswordUtil.hashPassword(userDTO.getPassword());
+        String hashedPassword = PasswordUtil.hashPassword(dto.getPassword());
         user.setPassword(hashedPassword);
         Integer res = userMapper.insertUser(user);
         if (res != 1) {
-            return ResponseCode.USER_INSERT_ERROR;
+            return ResponseCode.USER_INSERT_FAILED;
         }
         if (createBlankHuman) {
             humanService.createBlankHumanWithUserId(user.getId());
@@ -124,22 +126,23 @@ public class UserService {
     }
 
     // 暂时用于测试
-    public ResponseCode createSystemUser(UserDTO userDTO,
+    public ResponseCode createSystemUser(UserCreateRequest request,
                                          Boolean createBlankHuman){
-        ResponseCode code = checkUserDtoBeforeCreateUser(userDTO);
+        UserDTO dto = request.toDTO();
+        ResponseCode code = checkUserDtoBeforeCreateUser(dto);
         if(code != ResponseCode.OK){
             return code;
         }
 
-        User user = userDTOConverter.toEntity(userDTO);
+        User user = userDTOConverter.toEntity(dto);
         user.setId(IdUtil.getSnowflake().nextId());
         user.setOrganizationId(organizationService.getOrganizationId("SYSTEM"));
         // 密码加密
-        String hashedPassword = PasswordUtil.hashPassword(userDTO.getPassword());
+        String hashedPassword = PasswordUtil.hashPassword(dto.getPassword());
         user.setPassword(hashedPassword);
         Integer res = userMapper.insertUser(user);
         if (res != 1) {
-            return ResponseCode.USER_INSERT_ERROR;
+            return ResponseCode.USER_INSERT_FAILED;
         }
         if (createBlankHuman) {
             humanService.createBlankHumanWithUserId(user.getId());

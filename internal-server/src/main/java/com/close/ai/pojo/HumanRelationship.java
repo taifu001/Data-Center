@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 /**
  * @author nbwyctf
- * @since 2025-1-22
+ * @since 2025-01-22
  */
 @Data
 public class HumanRelationship {

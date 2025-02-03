@@ -6,7 +6,7 @@ import lombok.Data;
 
 /**
  * @author nbwyctf
- * @since 2025-1-25
+ * @since 2025-01-25
  */
 @Data
 public class RobotCreateRequest {

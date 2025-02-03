@@ -1,7 +1,7 @@
 package com.close.ai.dto.converter;
 
-import com.close.ai.dto.MessageDTO;
-import com.close.ai.pojo.Message;
+import com.close.ai.dto.PersonaDTO;
+import com.close.ai.pojo.Persona;
 import org.mapstruct.Mapper;
 
 /**
@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring")
 public interface PersonaDTOConverter {
-    MessageDTO fromEntity(Message message);
+    PersonaDTO fromEntity(Persona persona);
 
-    Message toEntity(MessageDTO messageDTO);
+    Persona toEntity(PersonaDTO personaDTO);
 }

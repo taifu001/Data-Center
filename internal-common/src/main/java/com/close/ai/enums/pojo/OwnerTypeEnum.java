@@ -10,6 +10,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum OwnerTypeEnum {
+    SYSTEM("system"),
     INDIVIDUAL("individual"),
     GROUP("group"),
     ORGANIZATION("organization"),

@@ -14,6 +14,8 @@ import java.util.List;
 public interface AgentMapper {
     Agent selectAgentById(@Param("id") Long id);
 
+    Agent selectActiveAgentById(@Param("id") Long id);
+
     List<Agent> selectActiveAgentsByOwner(@Param("ownerType") Integer ownerType,
                                           @Param("ownerId") Long ownerId);
 

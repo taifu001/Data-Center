@@ -9,7 +9,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum ConversationEndpointTypeEnum {
+public enum MessageEndpointTypeEnum {
     SYSTEM("system"),
     PERSONA("persona"),
     HUMAN("human"),

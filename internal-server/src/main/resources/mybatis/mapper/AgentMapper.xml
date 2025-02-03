@@ -18,6 +18,12 @@
         WHERE id = #{id}
     </select>
 
+    <select id="selectActiveAgentById" resultMap="AgentMap">
+        SELECT id, agent_template_id, name, owner_type, owner_id, is_only_for_internal, state, birthday
+        FROM agent
+        WHERE id = #{id} AND state = 0
+    </select>
+
     <select id="selectActiveAgentsByOwner" resultMap="AgentMap">
         SELECT id, agent_template_id, name, owner_type, owner_id, is_only_for_internal, state, birthday
         FROM agent

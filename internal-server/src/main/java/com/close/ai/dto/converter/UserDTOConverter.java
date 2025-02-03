@@ -14,10 +14,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UserDTOConverter {
     @Mapping(target = "recentPasswordList",
-            expression = "java(com.close.ai.utils.JacksonUtil.parseJsonToList(user.getRecentPasswords()))")
+            expression = "java(com.close.ai.utils.JacksonUtil.parseJsonToList(user.getRecentPasswords(), String.class))")
     UserDTO fromEntity(User user);
 
     @Mapping(target = "recentPasswords",
-            expression = "java(com.close.ai.utils.JacksonUtil.stringListToJson(dto.getRecentPasswordList()))")
+            expression = "java(com.close.ai.utils.JacksonUtil.listToJson(dto.getRecentPasswordList()))")
     User toEntity(UserDTO dto);
 }

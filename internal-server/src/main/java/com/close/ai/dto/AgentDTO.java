@@ -2,6 +2,7 @@ package com.close.ai.dto;
 
 import com.close.ai.enums.pojo.OwnerTypeEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AgentDTO {
     private Long id;
     private Long agentTemplateId;

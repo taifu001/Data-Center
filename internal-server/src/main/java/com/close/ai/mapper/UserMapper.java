@@ -12,10 +12,6 @@ import java.util.List;
  */
 @Mapper
 public interface UserMapper {
-    Integer insertUser(User user);
-
-    Integer deregisterAccount(@Param("id") Long id);
-
     User selectUserById(@Param("id") Long id);
 
     User selectActiveUserById(@Param("id") Long id);
@@ -31,6 +27,10 @@ public interface UserMapper {
                                                           @Param("phoneNumber") String phoneNumber);
 
     List<User> fuzzySelectActiveUserByEmail(@Param("email") String email);
+
+    Integer insertUser(User user);
+
+    Integer deregisterAccount(@Param("id") Long id);
 
     void updateUserById(User user);
 

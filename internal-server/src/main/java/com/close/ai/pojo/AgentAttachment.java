@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * @author nbwyctf
- * @since 2025-1-24
+ * @since 2025-01-24
  */
 @Data
 public class AgentAttachment {

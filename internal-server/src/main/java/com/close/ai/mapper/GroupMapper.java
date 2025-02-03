@@ -12,6 +12,8 @@ import org.apache.ibatis.annotations.Param;
 public interface GroupMapper {
     Group selectGroupById(@Param("id") Long id);
 
+    Group selectActiveGroupById(@Param("id") Long id);
+
     Integer insertGroup(Group group);
 
     Integer updateGroup(Group group);

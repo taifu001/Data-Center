@@ -15,6 +15,7 @@ public enum AgentTemplateFunctionTypeEnum {
     CHAT("chat"),
     FUNCTION("function"),
     OTHER("other"),
+    UNDEFINED("undefined")
     ;
 
     private final String functionType;

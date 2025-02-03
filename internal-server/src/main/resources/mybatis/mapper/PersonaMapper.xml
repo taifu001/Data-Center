@@ -17,6 +17,12 @@
         WHERE id = #{id}
     </select>
 
+    <select id="selectActivePersonaById" resultMap="PersonaMap">
+        SELECT id, agent_id, state, language, traits_json, created_time, updated_time
+        FROM persona
+        WHERE id = #{id} AND state = 0
+    </select>
+
     <insert id="insertPersona" parameterType="com.close.ai.pojo.Persona">
         INSERT INTO persona (id, agent_id, state, language, traits_json, created_time, updated_time)
         VALUES (#{id}, #{agentId}, #{state}, #{language}, #{traitsJson}, NOW(), NOW())

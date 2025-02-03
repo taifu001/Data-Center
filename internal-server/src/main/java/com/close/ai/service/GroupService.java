@@ -1,7 +1,9 @@
 package com.close.ai.service;
 
+import com.close.ai.dto.GroupDTO;
 import com.close.ai.dto.converter.GroupDTOConverter;
 import com.close.ai.mapper.GroupMapper;
+import com.close.ai.pojo.Group;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,13 +12,26 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class GroupService {
-    final GroupMapper groupMapper;
+    private final GroupMapper groupMapper;
 
-    final GroupDTOConverter groupDTOConverter;
+    private final GroupDTOConverter groupDTOConverter;
 
     public GroupService(GroupMapper groupMapper,
                         GroupDTOConverter groupDTOConverter) {
         this.groupMapper = groupMapper;
         this.groupDTOConverter = groupDTOConverter;
+    }
+
+    public GroupDTO getGroupById(Long id, boolean isActive) {
+        if (id == null) {
+            return null;
+        }
+        Group group = isActive
+                ? groupMapper.selectActiveGroupById(id)
+                : groupMapper.selectGroupById(id);
+        if (group == null) {
+            return null;
+        }
+        return groupDTOConverter.fromEntity(group);
     }
 }

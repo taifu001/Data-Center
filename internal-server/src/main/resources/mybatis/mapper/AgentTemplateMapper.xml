@@ -49,9 +49,9 @@
     </update>
 
     <insert id="insertAgentTemplate" parameterType="com.close.ai.pojo.AgentTemplate">
-        INSERT INTO agent_template (id, name, description, avatar, version, function_type, state,
+        INSERT INTO agent_template (id, name, description, avatar, version, function_type, sub_type, state,
                                     creator_type, creator, updater_type, updater, released_time, created_time, updated_time)
-        VALUES (#{id}, #{name}, #{description}, #{avatar}, #{version}, #{functionType}, #{state},
+        VALUES (#{id}, #{name}, #{description}, #{avatar}, #{version}, #{functionType}, #{subType}, #{state},
                 #{creatorType}, #{creator}, #{updaterType}, #{updater}, #{releasedTime}, NOW(), NOW())
     </insert>
 

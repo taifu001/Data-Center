@@ -11,6 +11,8 @@ import org.apache.ibatis.annotations.Mapper;
 public interface PersonaMapper {
     Persona selectPersonaById(Long id);
 
+    Persona selectActivePersonaById(Long id);
+
     Integer insertPersona(Persona persona);
 
     Integer updatePersona(Persona persona);

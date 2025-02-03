@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.close.ai.mapper.HumanPersonaConversationMapper">
+    <resultMap id="ConversationMap" type="com.close.ai.pojo.HumanPersonaConversation">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="human_id" property="humanId" jdbcType="BIGINT"/>
+        <result column="persona_id" property="personaId" jdbcType="BIGINT"/>
+        <result column="messages" property="messages" jdbcType="VARCHAR"/>
+        <result column="is_group" property="isGroup" jdbcType="VARCHAR"/>
+        <result column="group_id" property="groupId" jdbcType="BIGINT"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectHumanPersonaConversationById" resultMap="ConversationMap">
+        SELECT id, human_id, persona_id, messages, is_group, group_id, created_time, updated_time
+        FROM human_persona_conversation
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertHumanPersonaConversation" parameterType="com.close.ai.pojo.HumanPersonaConversation">
+        INSERT INTO human_persona_conversation (id, human_id, persona_id, messages, is_group, group_id, created_time, updated_time)
+        VALUES (#{id}, #{humanId}, #{personaId}, #{messages}, #{isGroup}, #{groupId}, NOW(), NOW())
+    </insert>
+
+    <update id="updateHumanPersonaConversation" parameterType="com.close.ai.pojo.HumanPersonaConversation">
+        UPDATE conversation
+        <set>
+            <if test="messages != null">messages = #{messages},</if>
+            <if test="isGroup != null">is_group = #{isGroup},</if>
+            <if test="groupId != null">group_id = #{groupId},</if>
+            updated_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper>

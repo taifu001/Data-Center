@@ -1,11 +1,13 @@
 package com.close.ai.dto;
 
-import com.close.ai.enums.pojo.ConversationEndpointTypeEnum;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author nbwyctf
@@ -14,16 +16,14 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ConversationDTO {
+@Builder
+public class HumanPersonaConversationDTO {
     private Long id;
-    private Integer state;
-    private ConversationEndpointTypeEnum fromType;
-    private Long fromId;
-    private ConversationEndpointTypeEnum toType;
-    private Long toId;
+    private Long humanId;
+    private Long personaId;
+    private List<Long> messages;
     private Boolean isGroup;
     private Long groupId;
-
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
 }

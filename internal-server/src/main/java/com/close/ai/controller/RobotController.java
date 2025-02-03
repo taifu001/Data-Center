@@ -1,6 +1,5 @@
 package com.close.ai.controller;
 
-import com.close.ai.dto.RobotDTO;
 import com.close.ai.enums.ResponseCode;
 import com.close.ai.request.create.RobotCreateRequest;
 import com.close.ai.response.Response;
@@ -25,7 +24,6 @@ public class RobotController {
 
     @PostMapping("/create")
     public Response<ResponseCode> createRobot(@RequestBody RobotCreateRequest request) {
-        RobotDTO dto = request.toDTO();
-        return Response.response(robotService.createRobot(dto));
+        return Response.response(robotService.createRobot(request));
     }
 }
