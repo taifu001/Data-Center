@@ -11,11 +11,63 @@
         <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
         <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
     </resultMap>
+    <resultMap id="HumanPersonaConversationMessagesMap" type="com.close.ai.dto.HumanPersonaConversationMessagesDTO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="human_id" property="humanId" jdbcType="BIGINT"/>
+        <result column="persona_id" property="personaId" jdbcType="BIGINT"/>
+        <result column="is_group" property="isGroup" jdbcType="TINYINT"/>
+        <result column="group_id" property="groupId" jdbcType="BIGINT"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+
+        <!-- 嵌套 messages 结果 -->
+        <collection property="messages" ofType="com.close.ai.dto.MessageDTO">
+            <id column="message_id" property="id" jdbcType="BIGINT"/>
+            <result column="message_type" property="messageType" jdbcType="VARCHAR"/>
+            <result column="interaction_type" property="interactionType" jdbcType="VARCHAR"/>
+            <result column="text_content" property="textContent" jdbcType="VARCHAR"/>
+            <result column="state" property="state" jdbcType="TINYINT"/>
+            <result column="from_type" property="fromType" jdbcType="VARCHAR"/>
+            <result column="from_id" property="fromId" jdbcType="BIGINT"/>
+            <result column="to_type" property="toType" jdbcType="VARCHAR"/>
+            <result column="to_id" property="toId" jdbcType="BIGINT"/>
+            <result column="file_id" property="fileId" jdbcType="BIGINT"/>
+            <result column="is_group" property="isGroup" jdbcType="TINYINT"/>
+            <result column="group_id" property="groupId" jdbcType="BIGINT"/>
+            <result column="sent_time" property="sentTime" jdbcType="TIMESTAMP"/>
+            <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+            <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        </collection>
+    </resultMap>
 
     <select id="selectHumanPersonaConversationById" resultMap="ConversationMap">
         SELECT id, human_id, persona_id, messages, is_group, group_id, created_time, updated_time
         FROM human_persona_conversation
         WHERE id = #{id}
+    </select>
+
+    <select id="selectHumanPersonaConversationMessages" resultMap="HumanPersonaConversationMessagesMap">
+        SELECT
+        hpc.id AS id, hpc.human_id, hpc.persona_id, hpc.is_group, hpc.group_id, hpc.created_time, hpc.updated_time,
+        m.id AS message_id, m.message_type, m.interaction_type, m.text_content, m.state,
+        m.from_type, m.from_id, m.to_type, m.to_id, m.file_id,
+        m.is_group AS message_is_group, m.group_id AS message_group_id,
+        m.sent_time, m.created_time AS message_created_time, m.updated_time AS message_updated_time
+        FROM human_persona_conversation hpc
+        LEFT JOIN message m ON JSON_CONTAINS(hpc.messages, CAST(m.id AS JSON), '$')
+        <where>
+            <if test="id != null">
+                AND hpc.id = #{id}
+            </if>
+            <if test="humanId != null">
+                AND hpc.human_id = #{humanId}
+            </if>
+            <if test="personaId != null">
+                AND hpc.persona_id = #{personaId}
+            </if>
+            AND m.state = 0
+        </where>
+        ORDER BY hpc.updated_time DESC
     </select>
 
     <insert id="insertHumanPersonaConversation" parameterType="com.close.ai.pojo.HumanPersonaConversation">

@@ -2,10 +2,12 @@ package com.close.ai.service;
 
 import com.close.ai.dto.HumanDTO;
 import com.close.ai.dto.HumanPersonaConversationDTO;
+import com.close.ai.dto.HumanPersonaConversationMessagesDTO;
 import com.close.ai.dto.PersonaDTO;
 import com.close.ai.dto.converter.HumanPersonaConversationDTOConverter;
 import com.close.ai.enums.ResponseCode;
 import com.close.ai.mapper.HumanPersonaConversationMapper;
+import com.close.ai.pojo.HumanPersonaConversation;
 import com.close.ai.request.create.HumanPersonaConversationSaveRequest;
 import com.close.ai.request.create.MessageSaveRequest;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,25 @@ public class HumanPersonaConversationService {
         this.personaService = personaService;
     }
 
+    public List<HumanPersonaConversationMessagesDTO> getHumanPersonaConversationMessages(Long id,
+                                                                                         Long humanId,
+                                                                                         Long personaId) {
+        // 不允许查询所有对话记录
+        if(id == null && humanId == null && personaId == null){
+            return null;
+        }
+        HumanPersonaConversation conversation = new HumanPersonaConversation();
+        conversation.setId(id);
+        conversation.setHumanId(humanId);
+        conversation.setPersonaId(personaId);
+        return humanPersonaConversationMapper.selectHumanPersonaConversationMessages(conversation);
+    }
+
+    /**
+     * 保存对话记录
+     * @param request 请求体
+     * @return ResponseCode
+     */
     public ResponseCode saveHumanPersonaConversation(HumanPersonaConversationSaveRequest request) {
         if(request == null || request.getHumanId() == null || request.getPersonaId() == null || request.getMessages() == null) {
             return ResponseCode.PARAMETER_NULL;
