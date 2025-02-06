@@ -7,6 +7,7 @@ import com.close.ai.enums.ResponseCode;
 import com.close.ai.mapper.PersonaMapper;
 import com.close.ai.pojo.Persona;
 import com.close.ai.request.create.PersonaCreateRequest;
+import com.close.ai.request.update.PersonaUpdateRequest;
 import com.close.ai.service.utils.SourceCheckService;
 import com.close.ai.utils.IdUtil;
 import org.springframework.stereotype.Service;
@@ -69,6 +70,18 @@ public class PersonaService {
 
         Integer res = personaMapper.insertPersona(persona);
         if (res != 1) {return ResponseCode.PERSONA_INSERT_FAILED;}
+        return ResponseCode.OK;
+    }
+
+    public ResponseCode updatePersona(PersonaUpdateRequest request) {
+        if (request == null || request.getId() == null) {
+            return ResponseCode.PARAMETER_NULL;
+        }
+
+        Persona persona = personaDTOConverter.toEntity(request.toDTO());
+
+        Integer res = personaMapper.updatePersona(persona);
+        if (res != 1) {return ResponseCode.PERSONA_UPDATE_FAILED;}
         return ResponseCode.OK;
     }
 }

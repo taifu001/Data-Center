@@ -5,6 +5,7 @@ import com.close.ai.dto.converter.HumanDTOConverter;
 import com.close.ai.enums.ResponseCode;
 import com.close.ai.mapper.HumanMapper;
 import com.close.ai.pojo.Human;
+import com.close.ai.request.update.HumanUpdateRequest;
 import com.close.ai.utils.IdUtil;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,19 @@ public class HumanService {
         if (res != 1) {
             return ResponseCode.HUMAN_INSERT_FAILED;
         }
+        return ResponseCode.OK;
+    }
+
+    public ResponseCode updateHuman(HumanUpdateRequest request) {
+        if (request == null || request.getId() == null) {
+            return ResponseCode.PARAMETER_NULL;
+        }
+
+        Human human = humanDTOConverter.toEntity(request.toDTO());
+
+        Integer res = humanMapper.updateHuman(human);
+
+        if (res != 1) {return ResponseCode.HUMAN_UPDATE_FAILED;}
         return ResponseCode.OK;
     }
 }

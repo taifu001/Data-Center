@@ -37,6 +37,7 @@ public enum ResponseCode {
 
     HUMAN_NOT_EXIST(10005001, "人物不存在"),
     HUMAN_INSERT_FAILED(10005010, "人物插入失败"),
+    HUMAN_UPDATE_FAILED(10005011, "人物更新失败"),
 
     PRODUCT_NAME_IS_REPEAT(100006001, "产品名字重复"),
     PRODUCT_INSERT_FAILED(100006010, "产品插入失败"),
@@ -53,6 +54,7 @@ public enum ResponseCode {
 
     PERSONA_NOT_EXIST(100010001, "人格不存在"),
     PERSONA_INSERT_FAILED(100010010, "人格插入失败"),
+    PERSONA_UPDATE_FAILED(100010011, "人格更新失败"),
 
     MESSAGE_INSERT_FAILED(100011010, "消息插入失败"),
 

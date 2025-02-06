@@ -2,6 +2,7 @@ package com.close.ai.dto.converter;
 
 import com.close.ai.dto.HumanDTO;
 import com.close.ai.pojo.Human;
+import com.close.ai.response.HumanResponse;
 import org.mapstruct.Mapper;
 
 /**
@@ -13,4 +14,6 @@ public interface HumanDTOConverter {
     HumanDTO fromEntity(Human human);
 
     Human toEntity(HumanDTO humanDTO);
+
+    HumanResponse buildResponse(HumanDTO humanDTO);
 }

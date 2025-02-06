@@ -19,7 +19,7 @@ public interface HumanMapper {
 
     Integer insertHuman(Human human);
 
-    Integer updateHumanById(Human human);
+    Integer updateHuman(Human human);
 
     Integer updateHumanByUserId(Human human);
 

@@ -33,7 +33,7 @@
         VALUES (#{id}, #{userId}, #{name}, #{gender}, #{birthday}, #{traitsJson}, 0, NOW(), NOW())
     </insert>
 
-    <update id="updateHumanById" parameterType="com.close.ai.pojo.Human">
+    <update id="updateHuman" parameterType="com.close.ai.pojo.Human">
         UPDATE human
         <set>
             <if test="name != null">name = #{name},</if>

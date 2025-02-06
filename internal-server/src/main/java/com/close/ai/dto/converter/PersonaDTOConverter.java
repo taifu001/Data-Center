@@ -2,6 +2,7 @@ package com.close.ai.dto.converter;
 
 import com.close.ai.dto.PersonaDTO;
 import com.close.ai.pojo.Persona;
+import com.close.ai.response.PersonaResponse;
 import org.mapstruct.Mapper;
 
 /**
@@ -13,4 +14,6 @@ public interface PersonaDTOConverter {
     PersonaDTO fromEntity(Persona persona);
 
     Persona toEntity(PersonaDTO personaDTO);
+
+    PersonaResponse buildResponse(PersonaDTO personaDTO);
 }
