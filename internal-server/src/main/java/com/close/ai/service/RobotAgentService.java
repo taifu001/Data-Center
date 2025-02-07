@@ -4,6 +4,7 @@ import com.close.ai.enums.ResponseCode;
 import com.close.ai.mapper.RobotAgentMapper;
 import com.close.ai.pojo.RobotAgent;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author nbwyctf
@@ -17,15 +18,18 @@ public class RobotAgentService {
         this.robotAgentMapper = robotAgentMapper;
     }
 
-    public ResponseCode createRobotAgent(Long robotId, Long agentId) {
+    public void createRobotAgent(Long robotId, Long agentId) {
         if (robotId == null || agentId == null) {
-            return ResponseCode.PARAMETER_NULL;
+            throw new IllegalArgumentException("Robot ID and Agent ID cannot be null");
         }
+
         RobotAgent robotAgent = new RobotAgent();
         robotAgent.setRobotId(robotId);
         robotAgent.setAgentId(agentId);
-        Integer res = robotAgentMapper.insertRobotAgent(robotAgent);
-        if (res != 1) {return ResponseCode.RELATIONSHIP_TABLE_INSERT_FAILED;}
-        return ResponseCode.OK;
+
+        int res = robotAgentMapper.insertRobotAgent(robotAgent);
+        if (res != 1) {
+            throw new RuntimeException("Failed to insert robot-agent relationship");
+        }
     }
 }

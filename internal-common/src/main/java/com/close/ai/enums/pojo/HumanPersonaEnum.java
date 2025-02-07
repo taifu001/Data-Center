@@ -5,14 +5,13 @@ import lombok.Getter;
 
 /**
  * @author nbwyctf
- * @since 2025-01-21
+ * @since 2025-02-07
  */
 @Getter
 @AllArgsConstructor
-public enum MessageSummaryTypeEnum {
-    INDIVIDUAL("individual"),
-    GROUP("group"),
+public enum HumanPersonaEnum {
+    HUMAN("human"),
+    PERSONA("persona"),
     ;
-    private final String messageSummaryType;
-
+    private final String value;
 }

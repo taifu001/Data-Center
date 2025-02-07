@@ -1,6 +1,7 @@
 package com.close.ai.pojo;
 
-import com.close.ai.enums.pojo.MessageSummaryTypeEnum;
+import com.close.ai.enums.pojo.HumanPersonaEnum;
+import com.close.ai.enums.pojo.IndividualGroupEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 public class MessageEventSummary {
     private Long id;
-    private MessageSummaryTypeEnum sourceType;
+    private HumanPersonaEnum sourceType;
     private Long sourceId;
     private String messages;
     private String summaryText;

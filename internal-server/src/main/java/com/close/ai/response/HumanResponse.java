@@ -2,7 +2,7 @@ package com.close.ai.response;
 
 import lombok.Data;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 /**
@@ -13,11 +13,8 @@ import java.time.LocalDateTime;
 public class HumanResponse {
     private Long id;
     private Long userId;
-    private String name;
-    private Integer gender;
-    private LocalDate birthday;
-    private String traitsJson;
     private Integer state;
+    private String traitsJson;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
 }

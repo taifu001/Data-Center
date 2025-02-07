@@ -1,6 +1,6 @@
 package com.close.ai.pojo;
 
-import com.close.ai.enums.pojo.MessageSummaryTypeEnum;
+import com.close.ai.enums.pojo.IndividualGroupEnum;
 import com.close.ai.enums.pojo.TimeTypeEnum;
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import lombok.Data;
 public class MessageTimeSummary {
     private Long id;
     // 来源类型
-    private MessageSummaryTypeEnum sourceType;
+    private IndividualGroupEnum sourceType;
     // 来源ID
     private Long sourceId;
     // 消息ID列表

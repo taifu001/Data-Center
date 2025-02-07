@@ -1,13 +1,12 @@
 package com.close.ai.service;
 
-import com.close.ai.dto.RobotDTO;
 import com.close.ai.dto.converter.RobotDTOConverter;
-import com.close.ai.enums.ResponseCode;
 import com.close.ai.mapper.RobotMapper;
 import com.close.ai.pojo.Robot;
 import com.close.ai.request.create.RobotCreateRequest;
 import com.close.ai.utils.IdUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -29,10 +28,11 @@ public class RobotService {
         this.robotDTOConverter = robotDTOConverter;
     }
 
-    public ResponseCode createRobot(RobotCreateRequest request) {
+    @Transactional
+    public void createRobot(RobotCreateRequest request) {
         if (request == null || request.getProductId() == null ||
                 request.getOwnerType() == null || request.getOwnerId() == null) {
-            return ResponseCode.PARAMETER_NULL;
+            throw new IllegalArgumentException("Request parameters cannot be null");
         }
 
         Robot robot = robotDTOConverter.toEntity(request.toDTO());
@@ -41,11 +41,12 @@ public class RobotService {
         if (robot.getState() == null) {
             robot.setState(0);
         } else if (!VALID_STATES.contains(robot.getState())) {
-            return ResponseCode.DATA_STATUS_INSERT_FAILED;
+            throw new IllegalStateException("Invalid robot state: " + robot.getState());
         }
 
         Integer res = robotMapper.insertRobot(robot);
-        if (res != 1) {return ResponseCode.ROBOT_INSERT_FAILED;}
-        return ResponseCode.OK;
+        if (res != 1) {
+            throw new RuntimeException("Failed to insert robot into database");
+        }
     }
 }

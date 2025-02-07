@@ -67,7 +67,7 @@
             </if>
             AND m.state = 0
         </where>
-        ORDER BY hpc.updated_time DESC
+        ORDER BY hpc.updated_time DESC, m.sent_time
     </select>
 
     <insert id="insertHumanPersonaConversation" parameterType="com.close.ai.pojo.HumanPersonaConversation">

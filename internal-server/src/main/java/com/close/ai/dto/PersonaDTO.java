@@ -20,8 +20,6 @@ public class PersonaDTO {
     private Long agentId;
     // 人格状态 0:正常 1:失效
     private Integer state;
-    // 人格回复使用的语言
-    private String language;
     private String traitsJson;
 
     private LocalDateTime createdTime;

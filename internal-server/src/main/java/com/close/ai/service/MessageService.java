@@ -8,6 +8,7 @@ import com.close.ai.pojo.Message;
 import com.close.ai.request.create.MessageSaveRequest;
 import com.close.ai.utils.IdUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -36,6 +37,7 @@ public class MessageService {
      * @param requests 请求
      * @return 响应码
      */
+    @Transactional
     public List<Long> saveMessages(List<MessageSaveRequest> requests) {
         if (requests == null || requests.isEmpty()) {
             throw new IllegalArgumentException("Request list cannot be empty");
@@ -63,7 +65,7 @@ public class MessageService {
         return messages.stream().map(Message::getId).toList();
     }
 
-
+    @Transactional
     public Long saveMessage(MessageSaveRequest request) {
         // 参数校验
         if (request == null || request.getMessageType() == null || request.getInteractionType() == null ||
@@ -94,7 +96,5 @@ public class MessageService {
         // 返回插入的消息 ID
         return generatedId;
     }
-
-
 
 }

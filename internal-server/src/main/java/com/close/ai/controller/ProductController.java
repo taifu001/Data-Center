@@ -25,7 +25,7 @@ public class ProductController {
 
     @PostMapping("/create")
     public Response<ResponseCode> createProduct(@RequestBody ProductCreateRequest request) {
-        ProductDTO dto = request.toDTO();
-        return Response.response(productService.createProduct(request));
+        productService.createProduct(request);
+        return Response.success();
     }
 }

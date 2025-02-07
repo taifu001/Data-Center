@@ -10,7 +10,9 @@ import com.close.ai.mapper.HumanPersonaConversationMapper;
 import com.close.ai.pojo.HumanPersonaConversation;
 import com.close.ai.request.create.HumanPersonaConversationSaveRequest;
 import com.close.ai.request.create.MessageSaveRequest;
+import com.close.ai.utils.IdUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -59,28 +61,32 @@ public class HumanPersonaConversationService {
      * @param request 请求体
      * @return ResponseCode
      */
-    public ResponseCode saveHumanPersonaConversation(HumanPersonaConversationSaveRequest request) {
-        if(request == null || request.getHumanId() == null || request.getPersonaId() == null || request.getMessages() == null) {
-            return ResponseCode.PARAMETER_NULL;
+    @Transactional
+    public void saveHumanPersonaConversation(HumanPersonaConversationSaveRequest request) {
+        if (request == null || request.getHumanId() == null || request.getPersonaId() == null || request.getMessages() == null) {
+            throw new IllegalArgumentException("Request parameters cannot be null");
         }
 
         HumanDTO human = humanService.getHumanById(request.getHumanId(), true);
-        if(human == null) {return ResponseCode.HUMAN_NOT_EXIST;}
+        if (human == null) {
+            throw new IllegalStateException("Human does not exist: " + request.getHumanId());
+        }
+
         PersonaDTO persona = personaService.getPersonaById(request.getPersonaId(), true);
-        if(persona == null) {return ResponseCode.PERSONA_NOT_EXIST;}
+        if (persona == null) {
+            throw new IllegalStateException("Persona does not exist: " + request.getPersonaId());
+        }
 
         List<MessageSaveRequest> messages = request.getMessages();
-
-        // 调用批量插入方法
         List<Long> messageIds = messageService.saveMessages(messages);
 
         HumanPersonaConversationDTO dto = request.toDTO();
+        dto.setId(IdUtil.getSnowflake().nextId());
         dto.setMessages(messageIds);
 
-        Integer res = humanPersonaConversationMapper.insertHumanPersonaConversation(humanPersonaConversationDTOConverter.toEntity(dto));
-        if(res != 1) {
-            return ResponseCode.HUMAN_PERSONA_CONVERSATION_INSERT_FAILED;
+        int res = humanPersonaConversationMapper.insertHumanPersonaConversation(humanPersonaConversationDTOConverter.toEntity(dto));
+        if (res != 1) {
+            throw new RuntimeException("Failed to insert human persona conversation");
         }
-        return ResponseCode.OK;
     }
 }

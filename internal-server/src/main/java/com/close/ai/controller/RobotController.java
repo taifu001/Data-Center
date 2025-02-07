@@ -24,6 +24,7 @@ public class RobotController {
 
     @PostMapping("/create")
     public Response<ResponseCode> createRobot(@RequestBody RobotCreateRequest request) {
-        return Response.response(robotService.createRobot(request));
+        robotService.createRobot(request);
+        return Response.success();
     }
 }

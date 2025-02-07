@@ -5,34 +5,32 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="agent_id" property="agentId" jdbcType="BIGINT"/>
         <result column="state" property="state" jdbcType="TINYINT"/>
-        <result property="language" column="language" jdbcType="VARCHAR"/>
         <result column="traits_json" property="traitsJson" jdbcType="VARCHAR"/>
         <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
         <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <select id="selectPersonaById" resultMap="PersonaMap">
-        SELECT id, agent_id, state, language, traits_json, created_time, updated_time
+        SELECT id, agent_id, state, traits_json, created_time, updated_time
         FROM persona
         WHERE id = #{id}
     </select>
 
     <select id="selectActivePersonaById" resultMap="PersonaMap">
-        SELECT id, agent_id, state, language, traits_json, created_time, updated_time
+        SELECT id, agent_id, state, traits_json, created_time, updated_time
         FROM persona
         WHERE id = #{id} AND state = 0
     </select>
 
     <insert id="insertPersona" parameterType="com.close.ai.pojo.Persona">
-        INSERT INTO persona (id, agent_id, state, language, traits_json, created_time, updated_time)
-        VALUES (#{id}, #{agentId}, #{state}, #{language}, #{traitsJson}, NOW(), NOW())
+        INSERT INTO persona (id, agent_id, state, traits_json, created_time, updated_time)
+        VALUES (#{id}, #{agentId}, #{state}, #{traitsJson}, NOW(), NOW())
     </insert>
 
     <update id="updatePersona" parameterType="com.close.ai.pojo.Persona">
         UPDATE persona
         <set>
             <if test="state != null">state = #{state},</if>
-            <if test="language != null">language = #{language},</if>
             <if test="traitsJson != null">traits_json = #{traitsJson},</if>
             updated_time = NOW()
         </set>

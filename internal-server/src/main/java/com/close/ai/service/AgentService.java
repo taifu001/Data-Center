@@ -10,6 +10,7 @@ import com.close.ai.request.create.AgentCreateRequest;
 import com.close.ai.service.utils.SourceCheckService;
 import com.close.ai.utils.IdUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -33,7 +34,8 @@ public class AgentService {
     public AgentService(AgentMapper agentMapper,
                         AgentTemplateService agentTemplateService,
                         SourceCheckService sourceCheckService,
-                        AgentDTOConverter agentDTOConverter, RobotAgentService robotAgentService) {
+                        AgentDTOConverter agentDTOConverter,
+                        RobotAgentService robotAgentService) {
         this.agentMapper = agentMapper;
         this.agentTemplateService = agentTemplateService;
         this.sourceCheckService = sourceCheckService;
@@ -54,38 +56,37 @@ public class AgentService {
         return agentDTOConverter.fromEntity(agent);
     }
 
-    public ResponseCode createAgent(AgentCreateRequest request) {
-        if(request == null || request.getRobotId() == null ||
+    @Transactional
+    public void createAgent(AgentCreateRequest request) {
+        if (request == null || request.getRobotId() == null ||
                 request.getAgentTemplateId() == null || request.getOwnerType() == null) {
-            return ResponseCode.PARAMETER_NULL;
+            throw new IllegalArgumentException("Request parameters cannot be null");
         }
 
         AgentTemplateDTO agentTemplateDTO = agentTemplateService.getAgentTemplateById(request.getAgentTemplateId());
-
-        if(agentTemplateDTO == null){
-            return ResponseCode.AGENT_TEMPLATE_NOT_EXIST;
+        if (agentTemplateDTO == null) {
+            throw new IllegalStateException("Agent template does not exist: " + request.getAgentTemplateId());
         }
 
-        ResponseCode ownerCode = sourceCheckService.checkSource(request.getOwnerType(), request.getOwnerId());
-        if(ownerCode != ResponseCode.OK){
-            return ownerCode;
+        if (sourceCheckService.checkSource(request.getOwnerType(), request.getOwnerId()) != ResponseCode.OK) {
+            throw new IllegalStateException("Invalid owner information");
         }
 
         Agent agent = agentDTOConverter.toEntity(request.toDTO());
-
         Long agentId = IdUtil.getSnowflake().nextId();
         agent.setId(agentId);
 
         if (agent.getState() == null) {
             agent.setState(0);
         } else if (!VALID_STATES.contains(agent.getState())) {
-            return ResponseCode.DATA_STATUS_INSERT_FAILED;
+            throw new IllegalStateException("Invalid agent state: " + agent.getState());
         }
 
-        Integer res = agentMapper.insertAgent(agent);
-        if (res != 1) {return ResponseCode.AGENT_INSERT_FAILED;}
+        int res = agentMapper.insertAgent(agent);
+        if (res != 1) {
+            throw new RuntimeException("Failed to insert agent");
+        }
 
         robotAgentService.createRobotAgent(request.getRobotId(), agentId);
-        return ResponseCode.OK;
     }
 }

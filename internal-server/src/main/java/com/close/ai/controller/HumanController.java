@@ -35,6 +35,7 @@ public class HumanController {
 
     @PostMapping("/update")
     public Response<ResponseCode> updateHuman(@RequestBody HumanUpdateRequest request) {
-        return Response.response(humanService.updateHuman(request));
+        humanService.updateHuman(request);
+        return Response.success();
     }
 }

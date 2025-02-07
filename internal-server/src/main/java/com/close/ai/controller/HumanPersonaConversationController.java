@@ -24,7 +24,8 @@ public class HumanPersonaConversationController {
 
     @PostMapping("/save")
     public Response<ResponseCode> saveHumanPersonaConversation(@RequestBody HumanPersonaConversationSaveRequest request) {
-        return Response.response(humanPersonaConversationService.saveHumanPersonaConversation(request));
+        humanPersonaConversationService.saveHumanPersonaConversation(request);
+        return Response.success();
     }
 
     @GetMapping("/getMessages")

@@ -11,6 +11,7 @@ import com.close.ai.request.create.AgentTemplateCreateRequest;
 import com.close.ai.service.utils.SourceCheckService;
 import com.close.ai.utils.IdUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -48,23 +49,21 @@ public class AgentTemplateService {
         return agentTemplateDTOConverter.fromEntity(agentTemplate);
     }
 
-    public ResponseCode createAgentTemplate(AgentTemplateCreateRequest request) {
+    @Transactional
+    public void createAgentTemplate(AgentTemplateCreateRequest request) {
         if (request == null || request.getName() == null || request.getCreatorType() == null || request.getUpdaterType() == null) {
-            return ResponseCode.PARAMETER_NULL;
+            throw new IllegalArgumentException("Request parameters cannot be null");
         }
 
         // 校验创建者与更新者
-        ResponseCode creatorCode = sourceCheckService.checkSource(request.getCreatorType(), request.getCreator());
-        if(creatorCode != ResponseCode.OK){
-            return creatorCode;
+        if (sourceCheckService.checkSource(request.getCreatorType(), request.getCreator()) != ResponseCode.OK) {
+            throw new IllegalStateException("Invalid creator information");
         }
-        ResponseCode updaterCode = sourceCheckService.checkSource(request.getUpdaterType(), request.getUpdater());
-        if(updaterCode != ResponseCode.OK){
-            return updaterCode;
+        if (sourceCheckService.checkSource(request.getUpdaterType(), request.getUpdater()) != ResponseCode.OK) {
+            throw new IllegalStateException("Invalid updater information");
         }
 
         AgentTemplate agentTemplate = agentTemplateDTOConverter.toEntity(request.toDTO());
-
         agentTemplate.setId(IdUtil.getSnowflake().nextId());
 
         if (agentTemplate.getFunctionType() == null) {
@@ -77,12 +76,13 @@ public class AgentTemplateService {
         if (agentTemplate.getState() == null) {
             agentTemplate.setState(0);
         } else if (!VALID_STATES.contains(agentTemplate.getState())) {
-            return ResponseCode.DATA_STATUS_INSERT_FAILED;
+            throw new IllegalStateException("Invalid agent template state: " + agentTemplate.getState());
         }
 
-        Integer res = agentTemplateMapper.insertAgentTemplate(agentTemplate);
-        if (res != 1) {return ResponseCode.AGENT_TEMPLATE_INSERT_FAILED;}
-        return ResponseCode.OK;
+        int res = agentTemplateMapper.insertAgentTemplate(agentTemplate);
+        if (res != 1) {
+            throw new RuntimeException("Failed to insert agent template");
+        }
     }
 
 }

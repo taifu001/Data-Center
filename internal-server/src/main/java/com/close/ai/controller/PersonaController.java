@@ -30,7 +30,8 @@ public class PersonaController {
     // todo 逻辑上应该是创建agent的时候自动创建persona，所以这个接口是临时的
     @PostMapping("/create")
     public Response<ResponseCode> createPersona(@RequestBody PersonaCreateRequest request) {
-        return Response.response(personaService.createPersona(request));
+        personaService.createPersona(request);
+        return Response.success();
     }
 
     @GetMapping("/getById/{personaId}")
@@ -42,6 +43,7 @@ public class PersonaController {
 
     @PostMapping("/update")
     public Response<ResponseCode> updatePersona(@RequestBody PersonaUpdateRequest request) {
-        return Response.response(personaService.updatePersona(request));
+        personaService.updatePersona(request);
+        return Response.success();
     }
 }

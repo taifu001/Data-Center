@@ -10,6 +10,7 @@ import com.close.ai.utils.IdUtil;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -80,32 +81,31 @@ public class OrganizationService {
      * @param organizationName 组织名称
      * @return Response
      */
-    public ResponseCode createOrganization(String organizationName, String typeStr) {
+    @Transactional
+    public void createOrganization(String organizationName, String typeStr) {
         // 校验组织名字
         if (organizationName == null || organizationName.isEmpty()) {
-            return ORGANIZATION_NAME_IS_EMPTY;
+            throw new IllegalArgumentException("Organization name cannot be null or empty");
         }
+
         // 检查是否已经存在该组织
         if (organizationMapper.selectActiveOrganizationByName(organizationName) != null) {
-            return ORGANIZATION_NAME_IS_REPEAT;
+            throw new IllegalStateException("Organization name already exists: " + organizationName);
         }
 
         // 检查并获取组织类型
         OrganizationTypeEnum organizationType = OrganizationTypeEnum.fromType(typeStr);
 
-
         Organization organization = new Organization();
-        IdUtil.SnowflakeIdGenerator snowflake = IdUtil.getSnowflake();
-
-        organization.setId(snowflake.nextId());
+        organization.setId(IdUtil.getSnowflake().nextId());
         organization.setName(organizationName);
         organization.setType(organizationType);
-
         organization.setIsDeleted(false);
 
-        organizationMapper.insertOrganization(organization);
-
-        return OK;
+        int res = organizationMapper.insertOrganization(organization);
+        if (res != 1) {
+            throw new RuntimeException("Failed to insert organization");
+        }
     }
 
 

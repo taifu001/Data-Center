@@ -2,15 +2,18 @@ package com.close.ai.service;
 
 import com.close.ai.dto.AgentDTO;
 import com.close.ai.dto.PersonaDTO;
+import com.close.ai.dto.TraitsChangeRecordDTO;
 import com.close.ai.dto.converter.PersonaDTOConverter;
 import com.close.ai.enums.ResponseCode;
+import com.close.ai.enums.pojo.HumanPersonaEnum;
+import com.close.ai.enums.pojo.TraitsRecordChangeTypeEnum;
 import com.close.ai.mapper.PersonaMapper;
 import com.close.ai.pojo.Persona;
 import com.close.ai.request.create.PersonaCreateRequest;
 import com.close.ai.request.update.PersonaUpdateRequest;
-import com.close.ai.service.utils.SourceCheckService;
 import com.close.ai.utils.IdUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -23,6 +26,7 @@ public class PersonaService {
     private final PersonaMapper personaMapper;
 
     private final AgentService agentService;
+    private final TraitsChangeRecordService traitsChangeRecordService;
 
     private final PersonaDTOConverter personaDTOConverter;
 
@@ -30,9 +34,11 @@ public class PersonaService {
 
     public PersonaService(PersonaMapper personaMapper,
                           AgentService agentService,
+                          TraitsChangeRecordService traitsChangeRecordService,
                           PersonaDTOConverter personaDTOConverter) {
         this.personaMapper = personaMapper;
         this.agentService = agentService;
+        this.traitsChangeRecordService = traitsChangeRecordService;
         this.personaDTOConverter = personaDTOConverter;
     }
 
@@ -49,39 +55,58 @@ public class PersonaService {
         return personaDTOConverter.fromEntity(persona);
     }
 
-    public ResponseCode createPersona(PersonaCreateRequest request) {
-        if(request == null || request.getAgentId() == null) {
-            return ResponseCode.PARAMETER_NULL;
+    @Transactional
+    public void createPersona(PersonaCreateRequest request) {
+        if (request == null || request.getAgentId() == null) {
+            throw new IllegalArgumentException("Request parameters cannot be null");
         }
 
         AgentDTO agentDTO = agentService.getAgentById(request.getAgentId(), true);
-        if(agentDTO == null){
-            return ResponseCode.AGENT_NOT_EXIST;
+        if (agentDTO == null) {
+            throw new IllegalStateException("Agent does not exist: " + request.getAgentId());
         }
 
         Persona persona = personaDTOConverter.toEntity(request.toDTO());
-
         persona.setId(IdUtil.getSnowflake().nextId());
+
         if (persona.getState() == null) {
             persona.setState(0);
         } else if (!VALID_STATES.contains(persona.getState())) {
-            return ResponseCode.DATA_STATUS_INSERT_FAILED;
+            throw new IllegalStateException("Invalid persona state: " + persona.getState());
         }
 
-        Integer res = personaMapper.insertPersona(persona);
-        if (res != 1) {return ResponseCode.PERSONA_INSERT_FAILED;}
-        return ResponseCode.OK;
+        int res = personaMapper.insertPersona(persona);
+        if (res != 1) {
+            throw new RuntimeException("Failed to insert persona");
+        }
     }
 
-    public ResponseCode updatePersona(PersonaUpdateRequest request) {
+    @Transactional
+    public void updatePersona(PersonaUpdateRequest request) {
         if (request == null || request.getId() == null) {
-            return ResponseCode.PARAMETER_NULL;
+            throw new IllegalArgumentException("Request parameters cannot be null");
         }
 
-        Persona persona = personaDTOConverter.toEntity(request.toDTO());
+        Persona pastPersona = personaMapper.selectPersonaById(request.getId());
+        if (pastPersona == null) {
+            throw new IllegalStateException("Persona does not exist: " + request.getId());
+        }
 
-        Integer res = personaMapper.updatePersona(persona);
-        if (res != 1) {return ResponseCode.PERSONA_UPDATE_FAILED;}
-        return ResponseCode.OK;
+        TraitsChangeRecordDTO traitsChangeRecordDTO = TraitsChangeRecordDTO.builder()
+                .sourceType(HumanPersonaEnum.PERSONA)
+                .sourceId(pastPersona.getId())
+                .oldTraitsJson(pastPersona.getTraitsJson())
+                .newTraitsJson(request.getTraitsJson())
+                .changeType(TraitsRecordChangeTypeEnum.UPDATE)
+                .build();
+
+        traitsChangeRecordService.saveTraitsChange(traitsChangeRecordDTO);
+
+        Persona persona = personaDTOConverter.toEntity(request.toDTO());
+        int res = personaMapper.updatePersona(persona);
+
+        if (res != 1) {
+            throw new RuntimeException("Failed to update persona");
+        }
     }
 }

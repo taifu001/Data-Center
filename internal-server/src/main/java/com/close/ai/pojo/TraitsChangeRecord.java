@@ -1,5 +1,6 @@
 package com.close.ai.pojo;
 
+import com.close.ai.enums.pojo.HumanPersonaEnum;
 import com.close.ai.enums.pojo.TraitsRecordChangeTypeEnum;
 import lombok.Data;
 
@@ -10,12 +11,13 @@ import java.time.LocalDateTime;
  * @since 2025-01-24
  */
 @Data
-public class HumanTraitsChangeRecord {
+public class TraitsChangeRecord {
     private Long id;
-    private Long humanId;
+    private HumanPersonaEnum sourceType;
+    private Long sourceId;
 
-    private String oldTraits;
-    private String newTraits;
+    private String oldTraitsJson;
+    private String newTraitsJson;
 
     private TraitsRecordChangeTypeEnum changeType;
     private LocalDateTime changedAt;

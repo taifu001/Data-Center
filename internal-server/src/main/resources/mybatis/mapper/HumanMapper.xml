@@ -4,43 +4,37 @@
     <resultMap id="HumanMap" type="com.close.ai.pojo.Human">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="user_id" property="userId" jdbcType="BIGINT"/>
-        <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result property="gender" column="gender" jdbcType="INTEGER"/>
-        <result property="birthday" column="birthday" jdbcType="DATE"/>
-        <result column="traits_json" property="traitsJson" jdbcType="VARCHAR"/>
         <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="traits_json" property="traitsJson" jdbcType="VARCHAR"/>
         <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
         <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <select id="selectHumanById" resultMap="HumanMap">
-        SELECT id, user_id, name, gender, birthday, traits_json, state, created_time, updated_time
+        SELECT id, user_id, state, traits_json, created_time, updated_time
         FROM human WHERE id = #{id}
     </select>
 
     <select id="selectActiveHumanById" resultMap="HumanMap">
-        SELECT id, user_id, name, gender, birthday, traits_json, state, created_time, updated_time
+        SELECT id, user_id, state, traits_json, created_time, updated_time
         FROM human WHERE id = #{id} AND state = 0
     </select>
 
     <select id="selectActiveHumanByUserId" resultMap="HumanMap">
-        SELECT id, user_id, name, gender, birthday, traits_json, state, created_time, updated_time
+        SELECT id, user_id, state, traits_json, created_time, updated_time
         FROM human WHERE user_id = #{userId} AND state = 0
     </select>
 
     <insert id="insertHuman" parameterType="com.close.ai.pojo.Human">
-        INSERT INTO human (id, user_id, name, gender, birthday, traits_json, state, created_time, updated_time)
-        VALUES (#{id}, #{userId}, #{name}, #{gender}, #{birthday}, #{traitsJson}, 0, NOW(), NOW())
+        INSERT INTO human (id, user_id, state, traits_json, created_time, updated_time)
+        VALUES (#{id}, #{userId}, 0, #{traitsJson}, NOW(), NOW())
     </insert>
 
     <update id="updateHuman" parameterType="com.close.ai.pojo.Human">
         UPDATE human
         <set>
-            <if test="name != null">name = #{name},</if>
-            <if test="gender != null">gender = #{gender},</if>
-            <if test="birthday != null">birthday = #{birthday},</if>
-            <if test="traitsJson != null">traits_json = #{traitsJson},</if>
             <if test="state != null">state = #{state},</if>
+            <if test="traitsJson != null">traits_json = #{traitsJson},</if>
             updated_time = NOW()
         </set>
         WHERE id = #{id}
@@ -49,11 +43,8 @@
     <update id="updateHumanByUserId" parameterType="com.close.ai.pojo.Human">
         UPDATE human
         <set>
-            <if test="name != null">name = #{name},</if>
-            <if test="gender != null">gender = #{gender},</if>
-            <if test="birthday != null">birthday = #{birthday},</if>
-            <if test="traitsJson != null">traits_json = #{traitsJson},</if>
             <if test="state != null">state = #{state},</if>
+            <if test="traitsJson != null">traits_json = #{traitsJson},</if>
             updated_time = NOW()
         </set>
         WHERE user_id = #{userId}

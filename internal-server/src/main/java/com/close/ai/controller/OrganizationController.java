@@ -24,8 +24,8 @@ public class OrganizationController {
 
     @PostMapping("/create")
     public Response<ResponseCode> createOrganization(@RequestBody OrganizationCreateRequest request) {
-        ResponseCode code = organizationService.createOrganization(request.getOrganizationName(), request.getOrganizationType());
-        return Response.response(code);
+        organizationService.createOrganization(request.getOrganizationName(), request.getOrganizationType());
+        return Response.success();
     }
 
 }

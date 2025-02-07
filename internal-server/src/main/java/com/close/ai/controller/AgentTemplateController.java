@@ -24,6 +24,7 @@ public class AgentTemplateController {
 
     @PostMapping("/create")
     public Response<ResponseCode> createAgentTemplate(@RequestBody AgentTemplateCreateRequest request) {
-        return Response.response(agentTemplateService.createAgentTemplate(request));
+        agentTemplateService.createAgentTemplate(request);
+        return Response.success();
     }
 }

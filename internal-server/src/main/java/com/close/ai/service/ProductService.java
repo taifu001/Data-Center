@@ -8,6 +8,7 @@ import com.close.ai.pojo.Product;
 import com.close.ai.request.create.ProductCreateRequest;
 import com.close.ai.utils.IdUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -29,37 +30,43 @@ public class ProductService {
         this.productDTOConverter = productDTOConverter;
     }
 
-    public ResponseCode createProduct(ProductCreateRequest request) {
-        if (request == null || request.getType() == null || request.getName().isEmpty() ) {
-            return ResponseCode.PARAMETER_NULL;
+    @Transactional
+    public void createProduct(ProductCreateRequest request) {
+        if (request == null || request.getType() == null || request.getName() == null || request.getName().isEmpty()) {
+            throw new IllegalArgumentException("Product request parameters cannot be null or empty");
         }
+
         String inputProductName = request.getName();
         if (productMapper.selectProductByName(inputProductName) != null) {
-            return ResponseCode.PRODUCT_NAME_IS_REPEAT;
+            throw new IllegalStateException("Product name is already in use: " + inputProductName);
         }
-        Product product = productDTOConverter.toEntity(request.toDTO());
 
+        Product product = productDTOConverter.toEntity(request.toDTO());
         product.setId(IdUtil.getSnowflake().nextId());
-        // 默认新创建的产品是state=1未发布的产品.
-        if(product.getState() == null) {
+
+        // 默认新创建的产品是 state=1 (未发布)
+        if (product.getState() == null) {
             product.setState(1);
         } else if (!VALID_STATES.contains(product.getState())) {
-            return ResponseCode.DATA_STATUS_INSERT_FAILED;
+            throw new IllegalStateException("Invalid product state: " + product.getState());
         }
 
-        Integer res = productMapper.insertProduct(product);
-        if (res != 1) { return ResponseCode.PRODUCT_INSERT_FAILED; }
-        return ResponseCode.OK;
+        int res = productMapper.insertProduct(product);
+        if (res != 1) {
+            throw new RuntimeException("Failed to insert product into database");
+        }
     }
 
-    public ResponseCode releaseProduct(ProductDTO dto) {
+    @Transactional
+    public void releaseProduct(ProductDTO dto) {
         if (dto == null || dto.getId() == null) {
-            return ResponseCode.PARAMETER_NULL;
+            throw new IllegalArgumentException("Product release request parameters cannot be null");
         }
 
         Product product = productDTOConverter.toEntity(dto);
-        Integer res = productMapper.releaseProduct(product);
-        if (res != 1) { return ResponseCode.PRODUCT_RELEASE_FAILED; }
-        return ResponseCode.OK;
+        int res = productMapper.releaseProduct(product);
+        if (res != 1) {
+            throw new RuntimeException("Failed to release product");
+        }
     }
 }

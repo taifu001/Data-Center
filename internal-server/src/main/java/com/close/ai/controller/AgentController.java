@@ -24,6 +24,7 @@ public class AgentController {
 
     @PostMapping("/create")
     public Response<ResponseCode> createAgent(@RequestBody AgentCreateRequest request) {
-        return Response.response(agentService.createAgent(request));
+        agentService.createAgent(request);
+        return Response.success();
     }
 }
