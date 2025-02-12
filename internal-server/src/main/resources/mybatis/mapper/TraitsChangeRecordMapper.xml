@@ -19,6 +19,6 @@
 
     <insert id="insertTraitsChangeRecord" parameterType="com.close.ai.pojo.TraitsChangeRecord">
         INSERT INTO traits_change_record (id, source_type, source_id, old_traits_json, new_traits_json, change_type, changed_at)
-        VALUES (#{id}, #{sourceType}, #{sourceId}, #{oldTraitsJson}, #{newTraitsJson}, #{changeType}, #{changedAt})
+        VALUES (#{id}, #{sourceType}, #{sourceId}, #{oldTraitsJson}, #{newTraitsJson}, #{changeType}, NOW())
     </insert>
 </mapper>

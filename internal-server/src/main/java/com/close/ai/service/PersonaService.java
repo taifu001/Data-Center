@@ -12,9 +12,11 @@ import com.close.ai.pojo.Persona;
 import com.close.ai.request.create.PersonaCreateRequest;
 import com.close.ai.request.update.PersonaUpdateRequest;
 import com.close.ai.utils.IdUtil;
+import com.close.ai.utils.JacksonUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -92,17 +94,35 @@ public class PersonaService {
             throw new IllegalStateException("Persona does not exist: " + request.getId());
         }
 
+        // 解析 JSON
+        Map<String, Object> oldTraitsMap = JacksonUtil.parseJsonToMap(pastPersona.getTraitsJson());
+        Map<String, Object> newTraitsMap = JacksonUtil.parseJsonToMap(request.getTraitsJson());
+
+        // 统一转换为下划线命名
+        oldTraitsMap = JacksonUtil.convertKeysToSnakeCase(oldTraitsMap);
+        newTraitsMap = JacksonUtil.convertKeysToSnakeCase(newTraitsMap);
+
+        // 合并 JSON
+        oldTraitsMap.putAll(newTraitsMap);
+
+        // 转换回 JSON
+        String mergedTraitsJson = JacksonUtil.mapToJson(oldTraitsMap);
+
+        // 记录变更
         TraitsChangeRecordDTO traitsChangeRecordDTO = TraitsChangeRecordDTO.builder()
                 .sourceType(HumanPersonaEnum.PERSONA)
                 .sourceId(pastPersona.getId())
                 .oldTraitsJson(pastPersona.getTraitsJson())
-                .newTraitsJson(request.getTraitsJson())
+                .newTraitsJson(mergedTraitsJson)
                 .changeType(TraitsRecordChangeTypeEnum.UPDATE)
                 .build();
 
         traitsChangeRecordService.saveTraitsChange(traitsChangeRecordDTO);
 
         Persona persona = personaDTOConverter.toEntity(request.toDTO());
+        // 确保存储的是合并后的 JSON
+        persona.setTraitsJson(mergedTraitsJson);
+
         int res = personaMapper.updatePersona(persona);
 
         if (res != 1) {

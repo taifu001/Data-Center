@@ -10,8 +10,11 @@ import com.close.ai.mapper.HumanMapper;
 import com.close.ai.pojo.Human;
 import com.close.ai.request.update.HumanUpdateRequest;
 import com.close.ai.utils.IdUtil;
+import com.close.ai.utils.JacksonUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 /**
  * @author nbwyctf
@@ -71,17 +74,34 @@ public class HumanService {
             throw new IllegalStateException("Human does not exist: " + request.getId());
         }
 
+        // 解析 JSON
+        Map<String, Object> oldTraitsMap = JacksonUtil.parseJsonToMap(pastHuman.getTraitsJson());
+        Map<String, Object> newTraitsMap = JacksonUtil.parseJsonToMap(request.getTraitsJson());
+
+        // 确保所有键使用下划线
+        oldTraitsMap = JacksonUtil.convertKeysToSnakeCase(oldTraitsMap);
+        newTraitsMap = JacksonUtil.convertKeysToSnakeCase(newTraitsMap);
+
+        // 合并 JSON
+        oldTraitsMap.putAll(newTraitsMap);
+
+        // 转换回 JSON
+        String mergedTraitsJson = JacksonUtil.mapToJson(oldTraitsMap);
+
         TraitsChangeRecordDTO traitsChangeRecordDTO = TraitsChangeRecordDTO.builder()
                 .sourceType(HumanPersonaEnum.HUMAN)
                 .sourceId(pastHuman.getId())
                 .oldTraitsJson(pastHuman.getTraitsJson())
-                .newTraitsJson(request.getTraitsJson())
+                .newTraitsJson(mergedTraitsJson)
                 .changeType(TraitsRecordChangeTypeEnum.UPDATE)
                 .build();
 
         traitsChangeRecordService.saveTraitsChange(traitsChangeRecordDTO);
 
         Human human = humanDTOConverter.toEntity(request.toDTO());
+        // 确保存储的是合并后的 JSON
+        human.setTraitsJson(mergedTraitsJson);
+
         int res = humanMapper.updateHuman(human);
 
         if (res != 1) {
